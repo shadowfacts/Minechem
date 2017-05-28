@@ -6,19 +6,14 @@ buildscript {
             name = "forge"
             url = "http://files.minecraftforge.net/maven"
         }
-        maven {
-            // Add maven repo for SpecialSource
-            name = "sonatype"
-            url = "https://oss.sonatype.org/content/repositories/snapshots/"
-        }
     }
     dependencies {
-        classpath 'net.minecraftforge.gradle:ForgeGradle:1.2-SNAPSHOT'
+        classpath 'net.minecraftforge.gradle:ForgeGradle:2.2-SNAPSHOT'
         classpath 'de.undercouch:gradle-download-task:1.2'
     }
 }
 
-apply plugin: 'forge'
+apply plugin: 'net.minecraftforge.gradle.forge'
 apply plugin: 'maven'
 apply plugin: 'maven-publish'
 apply plugin: 'de.undercouch.download'
@@ -32,17 +27,10 @@ buildProps.withReader {
 }
 
 repositories {
+    jcenter()
     maven {
         name = "forge"
         url = "http://files.minecraftforge.net/maven"
-    }
-    maven { // the repo from which to get NEI and stuff
-        name 'CB Repo'
-        url "http://chickenbones.net/maven"
-    }
-    ivy {
-        name 'FMP'
-        artifactPattern "http://files.minecraftforge.net/[module]/[module]-dev-[revision].[ext]"
     }
 	maven {
 		// OpenComputers maven repo
@@ -51,19 +39,16 @@ repositories {
 }
 
 dependencies {
-    compile group: 'codechicken', name: 'NotEnoughItems', version: "${config.version.minecraft}-${config.version.cc.nei}", ext: 'jar', classifier: "dev"
-    compile group: 'codechicken', name: 'CodeChickenCore', version: "${config.version.minecraft}-${config.version.cc.core}", ext: 'jar', classifier: "dev"
-    compile group: 'codechicken', name: 'CodeChickenLib', version: "${config.version.minecraft}-${config.version.cc.lib}", ext: 'jar', classifier: "dev"
     compile group: 'li.cil.oc', name: 'OpenComputers', version: "MC${config.version.minecraft}-${config.version.oc.api}-dev", ext: 'jar', classifier: "api"
-    compile fileTree(dir: 'libs', include: '*.jar')
-    compile fileTree(dir: 'libs', include: '*.zip')
 }
 
 group = "minechem"
 archivesBaseName = "Minechem"
 
 minecraft {
-    version = "${config.version.forge}-${config.version.minecraft}"
+    version = config.version.forge
+    mappings = config.version.mcp
+    runDir = "run"
 
     replace "@MAJOR@", config.version.mod.major
     replace "@MINOR@", config.version.mod.minor
@@ -124,45 +109,45 @@ sourceSets {
     }
 }
 
-import de.undercouch.gradle.tasks.download.Download
+// import de.undercouch.gradle.tasks.download.Download
 
-task getLibraries {
-    def libsFolder = new File('libs')
-    if (!libsFolder.isDirectory() ) {
-        libsFolder.mkdirs()
-    }
+// task getLibraries {
+//     def libsFolder = new File('libs')
+//     if (!libsFolder.isDirectory() ) {
+//         libsFolder.mkdirs()
+//     }
 
-	def ccSource = 'http://minecraft.curseforge.com/mc-mods/67504-computercraft/files/2216236/download'
-	def ccDest = new File('libs', 'ComputerCraft-1.65.jar')
+// 	def ccSource = 'http://minecraft.curseforge.com/mc-mods/67504-computercraft/files/2216236/download'
+// 	def ccDest = new File('libs', 'ComputerCraft-1.65.jar')
 
 
-	if(!ccDest.exists() ){
-		download {
-			src ccSource
-			dest ccDest
-		}
-	}
+// 	if(!ccDest.exists() ){
+// 		download {
+// 			src ccSource
+// 			dest ccDest
+// 		}
+// 	}
 
-    def mtSource = 'http://minetweaker3.powerofbytes.com/download/MineTweaker3-Dev-1.7.10-3.0.9C.jar'
-    def mtDest = new File('libs', 'MineTweaker3-Dev-1.7.10-3.0.9C.jar')
+//     def mtSource = 'http://minetweaker3.powerofbytes.com/download/MineTweaker3-Dev-1.7.10-3.0.9C.jar'
+//     def mtDest = new File('libs', 'MineTweaker3-Dev-1.7.10-3.0.9C.jar')
 
-    if(!mtDest.exists() ){
-        download {
-            src mtSource
-            dest mtDest
-        }
-    }
+//     if(!mtDest.exists() ){
+//         download {
+//             src mtSource
+//             dest mtDest
+//         }
+//     }
 
-    def cofhSource = 'http://minecraft.curseforge.com/mc-mods/220333-cofhlib/files/2233833/download'
-    def cofhDest = new File('libs', 'CoFHLib-1.7.10-1.0.1-151-dev.jar')
+//     def cofhSource = 'http://minecraft.curseforge.com/mc-mods/220333-cofhlib/files/2233833/download'
+//     def cofhDest = new File('libs', 'CoFHLib-1.7.10-1.0.1-151-dev.jar')
 
-    if(!cofhDest.exists() ){
-        download {
-            src cofhSource
-            dest cofhDest
-        }
-    }
-}
+//     if(!cofhDest.exists() ){
+//         download {
+//             src cofhSource
+//             dest cofhDest
+//         }
+//     }
+// }
 
 task apiZip(type: Zip) {
     classifier = 'api'
