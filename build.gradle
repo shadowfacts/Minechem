@@ -36,14 +36,27 @@ repositories {
 		// OpenComputers maven repo
 		url = "http://maven.cil.li/"
 	}
+    ivy {
+        name = "CoFHLib"
+        artifactPattern "http://addons-origin.cursecdn.com/files/2420/671/[module]-[revision].[ext]"
+    }
+    maven {
+        name = "covers1624"
+        url = "http://maven.covers1624.net/"
+    }
 }
 
 dependencies {
-    compile group: 'li.cil.oc', name: 'OpenComputers', version: "MC${config.version.minecraft}-${config.version.oc.api}-dev", ext: 'jar', classifier: "api"
+    deobfCompile group: "li.cil.oc", name: "OpenComputers", version: "MC${config.version.minecraft}-${config.version.oc.api}", classifier: "api"
+    deobfCompile group: "crafttweaker", name: "CraftTweaker-${config.version.minecraft}", version: config.version.crafttweaker
+    deobfCompile group: "cofh", name: "CoFHLib", version: config.version.minecraft + "-" + config.version.cofhlib, classifier: "universal"
 }
 
 group = "minechem"
 archivesBaseName = "Minechem"
+
+sourceCompatibility = "1.8"
+targetCompatibility = "1.8"
 
 minecraft {
     version = config.version.forge
@@ -108,46 +121,6 @@ sourceSets {
         }
     }
 }
-
-// import de.undercouch.gradle.tasks.download.Download
-
-// task getLibraries {
-//     def libsFolder = new File('libs')
-//     if (!libsFolder.isDirectory() ) {
-//         libsFolder.mkdirs()
-//     }
-
-// 	def ccSource = 'http://minecraft.curseforge.com/mc-mods/67504-computercraft/files/2216236/download'
-// 	def ccDest = new File('libs', 'ComputerCraft-1.65.jar')
-
-
-// 	if(!ccDest.exists() ){
-// 		download {
-// 			src ccSource
-// 			dest ccDest
-// 		}
-// 	}
-
-//     def mtSource = 'http://minetweaker3.powerofbytes.com/download/MineTweaker3-Dev-1.7.10-3.0.9C.jar'
-//     def mtDest = new File('libs', 'MineTweaker3-Dev-1.7.10-3.0.9C.jar')
-
-//     if(!mtDest.exists() ){
-//         download {
-//             src mtSource
-//             dest mtDest
-//         }
-//     }
-
-//     def cofhSource = 'http://minecraft.curseforge.com/mc-mods/220333-cofhlib/files/2233833/download'
-//     def cofhDest = new File('libs', 'CoFHLib-1.7.10-1.0.1-151-dev.jar')
-
-//     if(!cofhDest.exists() ){
-//         download {
-//             src cofhSource
-//             dest cofhDest
-//         }
-//     }
-// }
 
 task apiZip(type: Zip) {
     classifier = 'api'
