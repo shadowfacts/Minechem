@@ -17,11 +17,11 @@ public class PatreonGuiTab extends BasicGuiTab
 
     public PatreonGuiTab(BasicGuiContainer gui)
     {
-        super(gui, LocalizationHelper.getLocalString("tab.patreon.text"), 0);
+        super(gui, LocalizationHelper.localize("tab.patreon.text"), 0);
         this.backgroundColor = Compendium.Color.TrueColor.cyan;// I like cyan.
         this.enabled = Config.enablePatreon;
         this.link = Compendium.MetaData.patreon;
-        this.linkText = LocalizationHelper.getLocalString("tab.patreon.linkText");
+        this.linkText = LocalizationHelper.localize("tab.patreon.linkText");
         this.tabTitle = "tab.patreon.headerText";
         this.tabTooltip = "tab.patreon.tooltip";
         this.linkColor = Compendium.Color.TrueColor.yellow;

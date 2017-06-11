@@ -7,6 +7,7 @@ import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.world.World;
+import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.oredict.RecipeSorter;
 
 public class WrapperRecipe implements IRecipe
@@ -96,6 +97,12 @@ public class WrapperRecipe implements IRecipe
         ItemStack result = wrapper.copy();
         ((WrapperItem) result.getItem()).setWrappedItemStack(result, item);
         return result;
+    }
+
+    @Override
+    public ItemStack[] getRemainingItems(InventoryCrafting inv)
+    {
+        return ForgeHooks.defaultRecipeGetRemainingItems(inv);
     }
 
     @Override

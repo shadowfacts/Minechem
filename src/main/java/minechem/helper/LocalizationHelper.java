@@ -12,12 +12,12 @@ import java.util.IllegalFormatException;
  */
 public class LocalizationHelper
 {
-    public static String getLocalString(String key, Object... params)
+    public static String localize(String key, Object... params)
     {
-        return getLocalString(key, false, params);
+        return localize(key, false, params);
     }
 
-    public static String getLocalString(String key, boolean capitalize, Object... params)
+    public static String localize(String key, boolean capitalize, Object... params)
     {
         if (FMLCommonHandler.instance().getSide() == Side.CLIENT)
         {

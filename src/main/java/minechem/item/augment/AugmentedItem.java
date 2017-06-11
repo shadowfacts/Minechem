@@ -1,23 +1,19 @@
 package minechem.item.augment;
 
 import com.google.common.collect.Multimap;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import minechem.Compendium;
+import minechem.helper.LocalizationHelper;
 import minechem.item.IOverlay;
 import minechem.item.augment.augments.IAugment;
 import minechem.item.prefab.WrapperItem;
-import minechem.proxy.client.render.RenderHelper;
 import minechem.registry.AugmentRegistry;
-import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.client.renderer.texture.TextureManager;
-import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
@@ -28,8 +24,11 @@ import net.minecraft.item.*;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.nbt.NBTTagString;
-import net.minecraft.util.IIcon;
-import net.minecraft.util.StatCollector;
+import net.minecraft.util.ActionResult;
+import net.minecraft.util.EnumActionResult;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 public class AugmentedItem extends WrapperItem implements IAugmentedItem, IOverlay
@@ -50,6 +49,10 @@ public class AugmentedItem extends WrapperItem implements IAugmentedItem, IOverl
     }
 
 //    TODO: augment models
+    @Override
+    public void renderOverlay(FontRenderer fontRenderer, TextureManager textureManager, ItemStack itemStack, int left, int top, float z)
+    {
+    }
 //    @Override
 //    public void renderOverlay(FontRenderer fontRenderer, TextureManager textureManager, ItemStack itemStack, int left, int top, float z)
 //    {
@@ -231,17 +234,18 @@ public class AugmentedItem extends WrapperItem implements IAugmentedItem, IOverl
     @Override
     public String getItemStackDisplayName(ItemStack stack)
     {
-        return (getWrappedItemStack(stack) != null ? StatCollector.translateToLocal("augment.augmentedItem") + " " : "") + super.getItemStackDisplayName(stack);
+        return (getWrappedItemStack(stack) != null ? LocalizationHelper.localize("augment.augmentedItem") + " " : "") + super.getItemStackDisplayName(stack);
     }
 
     //################################Augment Effect Stuff####################################
+
     @Override
-    public boolean onBlockDestroyed(ItemStack stack, World world, Block block, int x, int y, int z, EntityLivingBase entityLivingBase)
+    public boolean onBlockDestroyed(ItemStack stack, World world, IBlockState state, BlockPos pos, EntityLivingBase entity)
     {
-        boolean result = super.onBlockDestroyed(stack, world, block, x, y, z, entityLivingBase);
+        boolean result = super.onBlockDestroyed(stack, world, state, pos, entity);
         for (Map.Entry<IAugment, Integer> entry : getAugments(stack).entrySet())
         {
-            result |= entry.getKey().onBlockDestroyed(stack, world, block, , x, entityLivingBase, entry.getValue());
+            result |= entry.getKey().onBlockDestroyed(stack, world, state, pos, entity, entry.getValue());
         }
         return result;
     }
@@ -273,31 +277,41 @@ public class AugmentedItem extends WrapperItem implements IAugmentedItem, IOverl
     }
 
     @Override
-    public boolean onItemUse(ItemStack stack, EntityPlayer player, World world, int x, int y, int z, int side, float hitX, float hitY, float hitZ)
+    public EnumActionResult onItemUse(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ)
     {
-        boolean result = super.onItemUse(stack, player, world, x, y, z, side, hitX, hitY, hitZ);
-        if (result)
+        EnumActionResult result = super.onItemUse(stack, player, world, pos, hand, facing, hitX, hitY, hitZ);
+        if (result == EnumActionResult.SUCCESS)
         {
-            return true;
+            return EnumActionResult.SUCCESS;
         }
         for (Map.Entry<IAugment, Integer> entry : getAugments(stack).entrySet())
         {
-            result |= entry.getKey().onItemUse(stack, player, world, , x, side, hitX, hitY, hitZ, entry.getValue());
+            EnumActionResult augmentResult = entry.getKey().onItemUse(stack, player, world, pos, hand, facing, hitX, hitY, hitZ, entry.getValue());
+            if (result == EnumActionResult.PASS) {
+                result = augmentResult;
+            } else if (result == EnumActionResult.FAIL && augmentResult == EnumActionResult.SUCCESS) {
+                result = EnumActionResult.SUCCESS;
+            }
         }
         return result;
     }
 
     @Override
-    public boolean onItemUseFirst(ItemStack stack, EntityPlayer player, World world, int x, int y, int z, int side, float hitX, float hitY, float hitZ)
+    public EnumActionResult onItemUseFirst(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ, EnumHand hand)
     {
-        boolean result = super.onItemUseFirst(stack, player, world, x, y, z, side, hitX, hitY, hitZ);
-        if (result)
+        EnumActionResult result = super.onItemUseFirst(stack, player, world, pos, side, hitX, hitY, hitZ, hand);
+        if (result == EnumActionResult.SUCCESS)
         {
-            return true;
+            return EnumActionResult.SUCCESS;
         }
         for (Map.Entry<IAugment, Integer> entry : getAugments(stack).entrySet())
         {
-            result |= entry.getKey().onItemUseFirst(stack, player, world, , x, side, hitX, hitY, hitZ, entry.getValue());
+            EnumActionResult augmentResult = entry.getKey().onItemUseFirst(stack, player, world, pos, side, hitX, hitY, hitZ, hand, entry.getValue());
+            if (result == EnumActionResult.PASS) {
+                result = augmentResult;
+            } else if (result == EnumActionResult.FAIL && augmentResult == EnumActionResult.SUCCESS) {
+                result = EnumActionResult.SUCCESS;
+            }
         }
         return result;
     }
@@ -318,12 +332,12 @@ public class AugmentedItem extends WrapperItem implements IAugmentedItem, IOverl
     }
 
     @Override
-    public boolean itemInteractionForEntity(ItemStack stack, EntityPlayer player, EntityLivingBase entityLivingBase)
+    public boolean itemInteractionForEntity(ItemStack stack, EntityPlayer player, EntityLivingBase target, EnumHand hand)
     {
-        boolean result = super.itemInteractionForEntity(stack, player, entityLivingBase);
+        boolean result = super.itemInteractionForEntity(stack, player, target, hand);
         for (Map.Entry<IAugment, Integer> entry : getAugments(stack).entrySet())
         {
-            result |= entry.getKey().itemInteractionForEntity(stack, player, entityLivingBase, entry.getValue());
+            result |= entry.getKey().itemInteractionForEntity(stack, player, target, hand, entry.getValue());
         }
         return result;
     }
@@ -344,26 +358,27 @@ public class AugmentedItem extends WrapperItem implements IAugmentedItem, IOverl
     }
 
     @Override
-    public ItemStack onItemRightClick(ItemStack stack, World world, EntityPlayer player)
+    public ActionResult<ItemStack> onItemRightClick(ItemStack stack, World world, EntityPlayer player, EnumHand hand)
     {
-        ItemStack result = super.onItemRightClick(stack, world, player);
+        ActionResult<ItemStack> result = super.onItemRightClick(stack, world, player, hand);
         for (Map.Entry<IAugment, Integer> entry : getAugments(stack).entrySet())
         {
-            result = entry.getKey().onItemRightClick(stack, world, player, entry.getValue());
+            result = entry.getKey().onItemRightClick(stack, world, player, hand, entry.getValue());
         }
         return result;
     }
 
-    @Override
-    public ItemStack onEaten(ItemStack stack, World world, EntityPlayer player)
-    {
-        ItemStack result = super.onEaten(stack, world, player);
-        for (Map.Entry<IAugment, Integer> entry : getAugments(stack).entrySet())
-        {
-            result = entry.getKey().onEaten(stack, world, player, entry.getValue());
-        }
-        return result;
-    }
+//    TODO: see if this was replaced by something
+//    @Override
+//    public ItemStack onEaten(ItemStack stack, World world, EntityPlayer player)
+//    {
+//        ItemStack result = super.onEaten(stack, world, player);
+//        for (Map.Entry<IAugment, Integer> entry : getAugments(stack).entrySet())
+//        {
+//            result = entry.getKey().onEaten(stack, world, player, entry.getValue());
+//        }
+//        return result;
+//    }
 
     @Override
     public void onUpdate(ItemStack stack, World world, Entity entity, int slot, boolean bool)
@@ -376,7 +391,7 @@ public class AugmentedItem extends WrapperItem implements IAugmentedItem, IOverl
     }
 
     @Override
-    public void onUsingTick(ItemStack stack, EntityPlayer player, int count)
+    public void onUsingTick(ItemStack stack, EntityLivingBase player, int count)
     {
         super.onUsingTick(stack, player, count);
         for (Map.Entry<IAugment, Integer> entry : getAugments(stack).entrySet())
@@ -385,16 +400,17 @@ public class AugmentedItem extends WrapperItem implements IAugmentedItem, IOverl
         }
     }
 
-    @Override
-    public float getDigSpeed(ItemStack itemstack, Block block, int metadata)
-    {
-        float result = super.getDigSpeed(itemstack, block, metadata);
-        for (Map.Entry<IAugment, Integer> entry : getAugments(itemstack).entrySet())
-        {
-            result = entry.getKey().getModifiedDigSpeed(itemstack, result, block, metadata, entry.getValue());
-        }
-        return result;
-    }
+//    TODO: see if this was replaced by something else
+//    @Override
+//    public float getDigSpeed(ItemStack itemstack, Block block, int metadata)
+//    {
+//        float result = super.getDigSpeed(itemstack, block, metadata);
+//        for (Map.Entry<IAugment, Integer> entry : getAugments(itemstack).entrySet())
+//        {
+//            result = entry.getKey().getModifiedDigSpeed(itemstack, result, block, metadata, entry.getValue());
+//        }
+//        return result;
+//    }
 
     @Override
     public int getHarvestLevel(ItemStack stack, String toolClass)

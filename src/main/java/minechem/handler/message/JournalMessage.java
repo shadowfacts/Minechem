@@ -58,7 +58,7 @@ public class JournalMessage extends BaseMessage implements IMessageHandler<Journ
             if (heldItem.getItem() instanceof JournalItem)
             {
                 JournalItem journalItem = (JournalItem) heldItem.getItem();
-                journalItem.writeKnowledge(heldItem, player, false);
+                journalItem.writeKnowledge(heldItem, player, message.hand, false);
             }
         }
         return null;

@@ -15,7 +15,10 @@ import net.minecraft.init.Items;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.ActionResult;
+import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.IFluidContainerItem;
@@ -67,7 +70,7 @@ public abstract class AugmentBase implements IAugment
     @Override
     public String getLocalizedName()
     {
-        return LocalizationHelper.getLocalString(localizationKey);
+        return LocalizationHelper.localize(localizationKey);
     }
 
     /**
@@ -208,10 +211,11 @@ public abstract class AugmentBase implements IAugment
 
     /**
      * Callback for item usage. If the item does something special on right clicking, he will have one of those. Return True if something happen and false if it don't.
-     *  @param stack
+     * @param stack
      * @param player
      * @param world
      * @param pos
+     * @param hand
      * @param side
      * @param hitX
      * @param hitY
@@ -219,9 +223,9 @@ public abstract class AugmentBase implements IAugment
      * @param level
      */
     @Override
-    public boolean onItemUse(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ, int level)
+    public EnumActionResult onItemUse(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ, int level)
     {
-        return false;
+        return EnumActionResult.PASS;
     }
 
     /**
@@ -229,16 +233,17 @@ public abstract class AugmentBase implements IAugment
      * @param player
      * @param world
      * @param pos
-     *@param side
+     * @param side
      * @param hitX
      * @param hitY
      * @param hitZ
+     * @param hand
      * @param level      @return true to prevent further processing
-     */
+     * */
     @Override
-    public boolean onItemUseFirst(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ, int level)
+    public EnumActionResult onItemUseFirst(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ, EnumHand hand, int level)
     {
-        return false;
+        return EnumActionResult.PASS;
     }
 
     /**
@@ -257,14 +262,14 @@ public abstract class AugmentBase implements IAugment
 
     /**
      * Returns true if the item can be used on the given entity, e.g. shears on sheep.
-     *
-     * @param stack
+     *  @param stack
      * @param player
      * @param entityLivingBase
+     * @param hand
      * @param level
      */
     @Override
-    public boolean itemInteractionForEntity(ItemStack stack, EntityPlayer player, EntityLivingBase entityLivingBase, int level)
+    public boolean itemInteractionForEntity(ItemStack stack, EntityPlayer player, EntityLivingBase entityLivingBase, EnumHand hand, int level)
     {
         return false;
     }
@@ -286,16 +291,16 @@ public abstract class AugmentBase implements IAugment
 
     /**
      * Called whenever this item is equipped and the right mouse button is pressed. Args: itemStack, world, entityPlayer
-     *
      * @param stack
      * @param world
      * @param player
+     * @param hand
      * @param level
      */
     @Override
-    public ItemStack onItemRightClick(ItemStack stack, World world, EntityPlayer player, int level)
+    public ActionResult<ItemStack> onItemRightClick(ItemStack stack, World world, EntityPlayer player, EnumHand hand, int level)
     {
-        return stack;
+        return new ActionResult<>(EnumActionResult.PASS, stack);
     }
 
     @Override
@@ -322,14 +327,13 @@ public abstract class AugmentBase implements IAugment
 
     /**
      * Called each tick while using an item.
-     *
-     * @param stack  The Item being used
+     *  @param stack  The Item being used
      * @param player The Player using the item
      * @param count  The amount of time in tick the item has been used for continuously
      * @param level
      */
     @Override
-    public void onUsingTick(ItemStack stack, EntityPlayer player, int count, int level)
+    public void onUsingTick(ItemStack stack, EntityLivingBase player, int count, int level)
     {
 
     }

@@ -1,5 +1,6 @@
 package minechem.item.augment.augments;
 
+import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import minechem.item.augment.IAugmentedItem;
@@ -41,7 +42,7 @@ public class AugmentLight extends AugmentBase
     }
 
     @Override
-    public boolean onItemUse(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ, int level)
+    public EnumActionResult onItemUse(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ, int level)
     {
         pos = pos.offset(side);
         if (!world.isRemote && world.isAirBlock(pos))
@@ -49,7 +50,7 @@ public class AugmentLight extends AugmentBase
             consumeAugment(stack, level * 2);
             world.setBlockState(pos, BlockRegistry.blockLight.forLevel((int) (level * 1.5F)), 3);
         }
-        return true;
+        return EnumActionResult.SUCCESS;
     }
 
 }

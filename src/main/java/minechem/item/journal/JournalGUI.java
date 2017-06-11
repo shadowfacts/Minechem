@@ -122,7 +122,7 @@ public class JournalGUI extends BookGUI
      * @param keycode
      */
     @Override
-    protected void keyTyped(char c, int keycode)
+    protected void keyTyped(char c, int keycode) throws IOException
     {
         super.keyTyped(c, keycode);
         /* Don't listen to KEY_LEFT or KEY_RIGHT; already handled */
@@ -137,7 +137,7 @@ public class JournalGUI extends BookGUI
     }
 
     @Override
-    protected void mouseClicked(int mouseX, int mouseY, int mouseButton)
+    protected void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException
     {
         super.mouseClicked(mouseX, mouseY, mouseButton);
         mouseX -= left;

@@ -1,6 +1,6 @@
 package minechem.registry;
 
-import cpw.mods.fml.common.registry.GameRegistry;
+import net.minecraftforge.fml.common.registry.GameRegistry;
 import minechem.Compendium;
 import minechem.apparatus.tier1.centrifuge.CentrifugeBlock;
 import minechem.apparatus.tier1.centrifuge.CentrifugeTileEntity;
@@ -25,25 +25,25 @@ public class BlockRegistry
     public static void init()
     {
         opticalMicroscope = new OpticalMicroscopeBlock();
-        GameRegistry.registerBlock(opticalMicroscope, opticalMicroscope.getUnlocalizedName());
+        GameRegistry.register(opticalMicroscope);
         GameRegistry.registerTileEntity(OpticalMicroscopeTileEntity.class, Compendium.Naming.opticalMicroscope + "TileEntity");
 
         electricCrucibleBlock = new ElectricCrucibleBlock();
-        GameRegistry.registerBlock(electricCrucibleBlock, electricCrucibleBlock.getUnlocalizedName());
+        GameRegistry.register(electricCrucibleBlock);
         GameRegistry.registerTileEntity(ElectricCrucibleTileEntity.class, Compendium.Naming.electricCrucible + "TileEntity");
 
         centrifugeBlock = new CentrifugeBlock();
-        GameRegistry.registerBlock(centrifugeBlock, centrifugeBlock.getUnlocalizedName());
+        GameRegistry.register(centrifugeBlock);
         GameRegistry.registerTileEntity(CentrifugeTileEntity.class, Compendium.Naming.centrifuge + "TileEntity");
 
         electrolysisBlock = new ElectrolysisBlock();
-        GameRegistry.registerBlock(electrolysisBlock, electrolysisBlock.getUnlocalizedName());
+        GameRegistry.register(electrolysisBlock);
         GameRegistry.registerTileEntity(ElectrolysisTileEntity.class, Compendium.Naming.electrolysis + "TileEntity");
 
         blockLight = new BlockLight();
-        GameRegistry.registerBlock(blockLight, blockLight.getLocalizedName());
+        GameRegistry.register(blockLight);
 
         blockRedstone = new BlockRedstone();
-        GameRegistry.registerBlock(blockRedstone, blockRedstone.getLocalizedName());
+        GameRegistry.register(blockRedstone);
     }
 }

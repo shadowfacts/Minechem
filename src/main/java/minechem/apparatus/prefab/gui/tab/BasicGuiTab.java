@@ -58,14 +58,14 @@ public abstract class BasicGuiTab extends TabBase
 
     public String getTitle()
     {
-        return LocalizationHelper.getLocalString(this.tabTitle);
+        return LocalizationHelper.localize(this.tabTitle);
     }
 
     public String getTooltip()
     {
         if (!isFullyOpened())
         {
-            LocalizationHelper.getLocalString(this.tabTooltip);
+            LocalizationHelper.localize(this.tabTooltip);
         }
         return null;
 

@@ -36,7 +36,7 @@ public class ElementAchievement extends Achievement implements IAchievementRende
     @Override
     public String getDescription()
     {
-        return String.format(LocalizationHelper.getLocalString(defaultElementDescription), element.fullName);
+        return String.format(LocalizationHelper.localize(defaultElementDescription), element.fullName);
     }
 
     /**

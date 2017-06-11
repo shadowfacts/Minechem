@@ -13,12 +13,12 @@ public abstract class LuaInventoryMethod extends LuaMethod
         super(methodName);
     }
 
-    public LuaInventoryMethod(String methodName, String args, Class... classes)
+    public LuaInventoryMethod(String methodName, String args, Class<?>... classes)
     {
         super(methodName, args, classes);
     }
 
-    public LuaInventoryMethod(String methodName, String args, int minArgs, int maxArgs, Class... classes)
+    public LuaInventoryMethod(String methodName, String args, int minArgs, int maxArgs, Class<?>... classes)
     {
         super(methodName, args, minArgs, maxArgs, classes);
     }

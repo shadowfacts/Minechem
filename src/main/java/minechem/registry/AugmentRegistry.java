@@ -101,9 +101,9 @@ public class AugmentRegistry
 
     public static void init()
     {
-        registerAugment(new ItemStack(Blocks.tnt), new AugmentTnt());
-        registerAugment(new ItemStack(Blocks.glowstone), new AugmentLight());
-        registerAugment(new ItemStack(Items.flint_and_steel), new AugmentFlint());
-        registerAugment(new ItemStack(Items.redstone), new AugmentRedstone());
+        registerAugment(new ItemStack(Blocks.TNT), new AugmentTnt());
+        registerAugment(new ItemStack(Blocks.GLOWSTONE), new AugmentLight());
+        registerAugment(new ItemStack(Items.FLINT_AND_STEEL), new AugmentFlint());
+        registerAugment(new ItemStack(Items.REDSTONE), new AugmentRedstone());
     }
 }

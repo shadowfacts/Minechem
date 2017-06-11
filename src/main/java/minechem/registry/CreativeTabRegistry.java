@@ -1,7 +1,5 @@
 package minechem.registry;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import minechem.Compendium;
 import net.minecraft.block.Block;
 import net.minecraft.creativetab.CreativeTabs;
@@ -80,14 +78,12 @@ public class CreativeTabRegistry
             super(label);
         }
 
-        @SideOnly(Side.CLIENT)
         @Override
         public Item getTabIconItem()
         {
             return iconItemStack.getItem();
         }
 
-        @SideOnly(Side.CLIENT)
         @Override
         public ItemStack getIconItemStack()
         {

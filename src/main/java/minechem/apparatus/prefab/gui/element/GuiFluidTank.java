@@ -5,8 +5,6 @@ import java.util.List;
 import minechem.helper.ColourHelper;
 import minechem.helper.LocalizationHelper;
 import minechem.Compendium;
-import net.minecraft.client.renderer.texture.TextureMap;
-import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.IFluidTank;
 import org.lwjgl.input.Mouse;
@@ -129,12 +127,12 @@ public class GuiFluidTank extends GuiElement
 
         if (fluidStack == null || fluidStack.getFluid() == null)
         {
-            description.add(LocalizationHelper.getLocalString("gui.element.tank.empty"));
+            description.add(LocalizationHelper.localize("gui.element.tank.empty"));
         } else
         {
             if (fluidStack.amount > 0)
             {
-                String amountToText = fluidStack.amount + LocalizationHelper.getLocalString("gui.element.tank.mB");
+                String amountToText = fluidStack.amount + LocalizationHelper.localize("gui.element.tank.mB");
 
                 description.add(fluidStack.getLocalizedName());
                 description.add(amountToText);

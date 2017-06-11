@@ -35,6 +35,6 @@ public class JournalHeader extends JournalElement
         {
             sIndent += "--";
         }
-        return new Heading(getKey(), new FormattedString(sIndent + " " + LocalizationHelper.getLocalString(titleKey)));
+        return new Heading(getKey(), new FormattedString(sIndent + " " + LocalizationHelper.localize(titleKey)));
     }
 }

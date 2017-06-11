@@ -1,12 +1,12 @@
 package minechem;
 
-import cpw.mods.fml.client.config.IConfigElement;
-import cpw.mods.fml.client.event.ConfigChangedEvent;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import minechem.helper.LocalizationHelper;
+import net.minecraftforge.fml.client.config.IConfigElement;
+import net.minecraftforge.fml.client.event.ConfigChangedEvent;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-import net.minecraft.util.StatCollector;
 import net.minecraftforge.common.config.ConfigElement;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.common.config.Property;
@@ -33,7 +33,7 @@ public class Config
 
     public static List<IConfigElement> getConfigElements()
     {
-        List<IConfigElement> list = new ArrayList<IConfigElement>();
+        List<IConfigElement> list = new ArrayList<>();
         list.addAll(new ConfigElement(config.getCategory(Configuration.CATEGORY_GENERAL)).getChildElements());
         return list;
     }
@@ -53,40 +53,40 @@ public class Config
         Property prop;
         List<String> configList = new ArrayList<String>();
 
-        config.addCustomCategoryComment(Configuration.CATEGORY_GENERAL, StatCollector.translateToLocal("config.general.description"));
+        config.addCustomCategoryComment(Configuration.CATEGORY_GENERAL, LocalizationHelper.localize("config.general.description"));
 
         prop = config.get(Configuration.CATEGORY_GENERAL, "debugMode", Config.debugMode);
-        prop.comment = StatCollector.translateToLocal("config.debugMode");
+        prop.setComment(LocalizationHelper.localize("config.debugMode"));
         prop.setLanguageKey("config.debugMode.tooltip");
         debugMode = prop.getBoolean();
         configList.add(prop.getName());
 
         prop = config.get(Configuration.CATEGORY_GENERAL, "useDefaultElements", Config.useDefaultElements);
-        prop.comment = StatCollector.translateToLocal("config.useDefaultElements");
+        prop.setComment(LocalizationHelper.localize("config.useDefaultElements"));
         prop.setLanguageKey("config.useDefaultElements.tooltip");
         useDefaultElements = prop.getBoolean();
         configList.add(prop.getName());
 
         prop = config.get(Configuration.CATEGORY_GENERAL, "useDefaultMolecules", Config.useDefaultMolecules);
-        prop.comment = StatCollector.translateToLocal("config.useDefaultMolecules");
+        prop.setComment(LocalizationHelper.localize("config.useDefaultMolecules"));
         prop.setLanguageKey("config.useDefaultMolecules.tooltip");
         useDefaultMolecules = prop.getBoolean();
         configList.add(prop.getName());
 
         prop = config.get(Configuration.CATEGORY_GENERAL, "useDefaultResearchPages", Config.useDefaultResearchPages);
-        prop.comment = StatCollector.translateToLocal("config.useDefaultResearchPages");
+        prop.setComment(LocalizationHelper.localize("config.useDefaultResearchPages"));
         prop.setLanguageKey("config.useDefaultResearchPages.tooltip");
         useDefaultResearchPages = prop.getBoolean();
         configList.add(prop.getName());
 
         prop = config.get(Configuration.CATEGORY_GENERAL, "enablePatreon", Config.enablePatreon);
-        prop.comment = StatCollector.translateToLocal("config.enablePatreon");
+        prop.setComment(LocalizationHelper.localize("config.enablePatreon"));
         prop.setLanguageKey("config.enablePatreon.tooltip");
         enablePatreon = prop.getBoolean();
         configList.add(prop.getName());
 
         prop = config.get(Configuration.CATEGORY_GENERAL, "playerPrivateKnowledge", Config.playerPrivateKnowledge);
-        prop.comment = StatCollector.translateToLocal("config.playerPrivateKnowledge");
+        prop.setComment(LocalizationHelper.localize("config.playerPrivateKnowledge"));
         prop.setLanguageKey("config.playerPrivateKnowledge.tooltip");
         playerPrivateKnowledge = prop.getBoolean();
         configList.add(prop.getName());
@@ -100,7 +100,7 @@ public class Config
     @SubscribeEvent
     public void onConfigChangedEvent(ConfigChangedEvent.OnConfigChangedEvent event)
     {
-        if (event.modID.equalsIgnoreCase(Compendium.Naming.id))
+        if (event.getModID().equalsIgnoreCase(Compendium.Naming.id))
         {
             loadConfig();
         }

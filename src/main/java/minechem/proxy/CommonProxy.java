@@ -25,12 +25,12 @@ public class CommonProxy
 
     public EntityPlayer getPlayer(MessageContext context)
     {
-        return context.getServerHandler().player;
+        return context.getServerHandler().playerEntity;
     }
 
     public World getWorld(MessageContext context)
     {
-        return context.getServerHandler().player.world;
+        return context.getServerHandler().playerEntity.world;
     }
 
     public void registerRenderers()

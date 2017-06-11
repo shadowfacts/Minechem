@@ -7,7 +7,6 @@ import net.afterlifelochie.fontbox.document.Element;
 import net.afterlifelochie.fontbox.document.Image;
 import net.afterlifelochie.fontbox.document.Paragraph;
 import net.afterlifelochie.fontbox.document.property.AlignmentMode;
-import net.afterlifelochie.fontbox.document.property.FloatMode;
 import net.minecraft.entity.player.EntityPlayer;
 
 public class JournalText extends JournalElement
@@ -30,7 +29,7 @@ public class JournalText extends JournalElement
     {
         if (isUnlocked(player, getKey()))
         {
-            String s = LocalizationHelper.getLocalString(textKey);
+            String s = LocalizationHelper.localize(textKey);
             return s.isEmpty() ? new Image(Compendium.Resource.GUI.noContent, 301, 294, AlignmentMode.JUSTIFY) : new Paragraph(new FormattedString(s));
         }
         return null;
@@ -41,7 +40,7 @@ public class JournalText extends JournalElement
     {
         if (isUnlocked(keys, getKey()))
         {
-            String s = LocalizationHelper.getLocalString(textKey);
+            String s = LocalizationHelper.localize(textKey);
             return s.isEmpty() ? new Image(Compendium.Resource.GUI.noContent, 301, 294, AlignmentMode.JUSTIFY) : new Paragraph(new FormattedString(s));
         }
         return null;

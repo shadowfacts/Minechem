@@ -1,7 +1,7 @@
 package minechem.item.chemical;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import java.util.List;
 import minechem.Compendium;
 import minechem.chemical.ChemicalBase;
@@ -9,60 +9,21 @@ import minechem.helper.Jenkins;
 import minechem.item.prefab.BasicItem;
 import minechem.registry.CreativeTabRegistry;
 import minechem.registry.ItemRegistry;
-import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.IIcon;
 
 public class ChemicalItem extends BasicItem
 {
-    // @TODO maybe replace the textures since I just used the old ones
-    @SideOnly(Side.CLIENT)
-    public IIcon dust;
-    @SideOnly(Side.CLIENT)
-    public IIcon tube;
-    @SideOnly(Side.CLIENT)
-    public IIcon moleculeSymbol;
-    @SideOnly(Side.CLIENT)
-    public IIcon[] liquid;
-    @SideOnly(Side.CLIENT)
-    public IIcon[] gas;
-    @SideOnly(Side.CLIENT)
-    public IIcon[] plasma;
+//    TODO: chemical item models
 
     public ChemicalItem()
     {
         super("chemical");
         setCreativeTab(CreativeTabRegistry.TAB_CHEMICALS);
 
-    }
-
-    @Override
-    @SideOnly(Side.CLIENT)
-    public void registerIcons(IIconRegister iconRegister)
-    {
-        super.registerIcons(iconRegister);
-        liquid = new IIcon[7];
-        gas = new IIcon[7];
-        plasma = new IIcon[1];
-        tube = iconRegister.registerIcon(Compendium.Naming.id + ":" + iconString);
-        dust = iconRegister.registerIcon(Compendium.Naming.id + ":" + iconString + "_dust");
-        moleculeSymbol = iconRegister.registerIcon(Compendium.Naming.id + ":" + iconString + "_molecule");
-        for (int i = 0; i < liquid.length; i++)
-        {
-            liquid[i] = iconRegister.registerIcon(Compendium.Naming.id + ":" + iconString + "_liquid" + (i + 1));
-        }
-        for (int i = 0; i < gas.length; i++)
-        {
-            gas[i] = iconRegister.registerIcon(Compendium.Naming.id + ":" + iconString + "_gas" + (i + 1));
-        }
-        for (int i = 0; i < plasma.length; i++)
-        {
-            plasma[i] = iconRegister.registerIcon(Compendium.Naming.id + ":" + iconString + "_plasma" + (i + 1));
-        }
     }
 
     @Override
@@ -103,16 +64,17 @@ public class ChemicalItem extends BasicItem
         }
     }
 
-    @Override
-    public int getColorFromItemStack(ItemStack itemStack, int renderPass)
-    {
-        ChemicalBase chemicalBase = getChemicalBase(itemStack);
-        if (chemicalBase != null)
-        {
-            return chemicalBase.getColour();
-        }
-        return super.getColorFromItemStack(itemStack, renderPass);
-    }
+//    todo: IItemColor
+//    @Override
+//    public int getColorFromItemStack(ItemStack itemStack, int renderPass)
+//    {
+//        ChemicalBase chemicalBase = getChemicalBase(itemStack);
+//        if (chemicalBase != null)
+//        {
+//            return chemicalBase.getColour();
+//        }
+//        return super.getColorFromItemStack(itemStack, renderPass);
+//    }
 
     public static ChemicalBase getChemicalBase(ItemStack itemStack)
     {

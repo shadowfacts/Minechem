@@ -19,7 +19,7 @@ public class AugmentTnt extends AugmentBase
     @Override
     public boolean onBlockDestroyed(ItemStack stack, World world, IBlockState state, BlockPos pos, EntityLivingBase entityLivingBase, int level)
     {
-        createExplosion(world, null, x + rand.nextDouble(), y + rand.nextDouble(), z + rand.nextDouble(), level + 3, stack, level);
+        createExplosion(world, null, pos.getX() + rand.nextDouble(), pos.getY() + rand.nextDouble(), pos.getZ() + rand.nextDouble(), level + 3, stack, level);
         return false;
     }
 

@@ -7,7 +7,7 @@ public abstract class LuaMethod
 
     private final String methodName;
     private final String args;
-    private final Class[] classes;
+    private final Class<?>[] classes;
     private final int minArgs, maxArgs;
 
     public LuaMethod(String methodName)
@@ -15,17 +15,17 @@ public abstract class LuaMethod
         this(methodName, "()", 0, 0);
     }
 
-    public LuaMethod(String methodName, String args, Class... classes)
+    public LuaMethod(String methodName, String args, Class<?>... classes)
     {
         this(methodName, args, classes.length, classes);
     }
 
-    public LuaMethod(String methodName, String args, int numArgs, Class... classes)
+    public LuaMethod(String methodName, String args, int numArgs, Class<?>... classes)
     {
         this(methodName, args, numArgs, Math.max(numArgs, classes.length), classes);
     }
 
-    public LuaMethod(String methodName, String args, int minArgs, int maxArgs, Class... classes)
+    public LuaMethod(String methodName, String args, int minArgs, int maxArgs, Class<?>... classes)
     {
         this.methodName = methodName;
         this.args = args;

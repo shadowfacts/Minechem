@@ -9,7 +9,10 @@ import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ActionResult;
+import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
@@ -65,12 +68,12 @@ public interface IAugment
     /**
      * Callback for item usage. If the item does something special on right clicking, he will have one of those. Return True if something happen and false if it don't.
      */
-    boolean onItemUse(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ, int level);
+    EnumActionResult onItemUse(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ, int level);
 
     /**
      * @return true to prevent further processing
      */
-    boolean onItemUseFirst(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ, int level);
+    EnumActionResult onItemUseFirst(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ, EnumHand hand, int level);
 
     /**
      * Called when a entity tries to play the 'swing' animation.
@@ -84,7 +87,7 @@ public interface IAugment
     /**
      * Returns true if the item can be used on the given entity, e.g. shears on sheep.
      */
-    boolean itemInteractionForEntity(ItemStack stack, EntityPlayer player, EntityLivingBase entityLivingBase, int level);
+    boolean itemInteractionForEntity(ItemStack stack, EntityPlayer player, EntityLivingBase entityLivingBase, EnumHand hand, int level);
 
     /**
      * Called when the player Left Clicks (attacks) an entity. Processed before damage is done, if return value is true further processing is canceled and the entity is not attacked.
@@ -99,7 +102,7 @@ public interface IAugment
     /**
      * Called whenever this item is equipped and the right mouse button is pressed. Args: itemStack, world, entityPlayer
      */
-    ItemStack onItemRightClick(ItemStack stack, World world, EntityPlayer player, int level);
+    ActionResult<ItemStack> onItemRightClick(ItemStack stack, World world, EntityPlayer player, EnumHand hand, int level);
 
     ItemStack onEaten(ItemStack stack, World world, EntityPlayer player, int level);
 
@@ -110,12 +113,11 @@ public interface IAugment
 
     /**
      * Called each tick while using an item.
-     *
-     * @param stack  The Item being used
+     *  @param stack  The Item being used
      * @param player The Player using the item
      * @param count  The amount of time in tick the item has been used for continuously
      */
-    void onUsingTick(ItemStack stack, EntityPlayer player, int count, int level);
+    void onUsingTick(ItemStack stack, EntityLivingBase player, int count, int level);
 
     /**
      * @param prevDigSpeed unmodified dig speed
