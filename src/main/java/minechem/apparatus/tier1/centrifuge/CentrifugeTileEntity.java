@@ -11,15 +11,4 @@ public class CentrifugeTileEntity extends BasicInventoryTileEntity
         super(Compendium.Naming.centrifuge, 2);
     }
 
-    @Override
-    public String getInventoryName()
-    {
-        return Compendium.Naming.centrifuge;
-    }
-
-    @Override
-    public void updateEntity()
-    {
-    }
-
 }

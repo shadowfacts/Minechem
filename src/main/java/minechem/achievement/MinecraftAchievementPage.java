@@ -3,10 +3,11 @@ package minechem.achievement;
 import java.util.Random;
 import minechem.asm.MinechemHooks;
 import minechem.proxy.client.render.RenderHelper;
+import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.init.Blocks;
-import net.minecraft.util.IIcon;
 
 public class MinecraftAchievementPage
 {
@@ -29,7 +30,7 @@ public class MinecraftAchievementPage
             {
                 random.setSeed(mc.getSession().getPlayerID().hashCode() + i + column + (j + row) * 16);
                 icon = random.nextInt(1 + j + row) + (j + row) / 2;
-                IIcon iicon = Blocks.bedrock.getIcon(0, 0);
+                TextureAtlasSprite texture = getTexture(Blocks.BEDROCK);
 
                 if (icon <= 37 && j + row != 35)
                 {
@@ -37,29 +38,39 @@ public class MinecraftAchievementPage
                     {
                         if (random.nextInt(2) == 0)
                         {
-                            iicon = Blocks.diamond_ore.getIcon(0, 0);
-                        } else
-                        {
-                            iicon = Blocks.redstone_ore.getIcon(0, 0);
+                            texture = getTexture(Blocks.DIAMOND_ORE);
                         }
-                    } else if (icon == 10)
+                        else
+                        {
+                            texture = getTexture(Blocks.REDSTONE_ORE);
+                        }
+                    }
+                    else if (icon == 10)
                     {
-                        iicon = Blocks.iron_ore.getIcon(0, 0);
-                    } else if (icon == 8)
+                        texture = getTexture(Blocks.IRON_ORE);
+                    }
+                    else if (icon == 8)
                     {
-                        iicon = Blocks.coal_ore.getIcon(0, 0);
-                    } else if (icon > 4)
+                        texture = getTexture(Blocks.COAL_ORE);
+                    }
+                    else if (icon > 4)
                     {
-                        iicon = Blocks.stone.getIcon(0, 0);
-                    } else if (icon > 0)
+                        texture = getTexture(Blocks.STONE);
+                    }
+                    else if (icon > 0)
                     {
-                        iicon = Blocks.dirt.getIcon(0, 0);
+                        texture = getTexture(Blocks.DIRT);
                     }
                 }
 
-                mc.getTextureManager().bindTexture(TextureMap.locationBlocksTexture);
-                RenderHelper.drawTexturedRectUV(column * 16 - k, row * 16 - l, z, 16, 16, iicon);
+                mc.getTextureManager().bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
+                RenderHelper.drawTexturedRectUV(column * 16 - k, row * 16 - l, z, 16, 16, texture);
             }
         }
     }
+
+    private static TextureAtlasSprite getTexture(Block block) {
+        return Minecraft.getMinecraft().getBlockRendererDispatcher().getBlockModelShapes().getTexture(block.getDefaultState());
+    }
+
 }

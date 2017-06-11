@@ -19,7 +19,7 @@ public enum Class
     {
         this.name = name;
         this.obfName = obfName;
-        this.fields = new TreeMap<String, Field>();
+        this.fields = new TreeMap<>();
     }
 
     static

@@ -2,7 +2,9 @@ package minechem.compatibility.lua.methods.liquids;
 
 import minechem.compatibility.lua.methods.LuaMethod;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraftforge.fluids.IFluidHandler;
+import net.minecraft.util.EnumFacing;
+
+import static net.minecraftforge.fluids.capability.CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY;
 
 public abstract class LuaFluidMethod extends LuaMethod
 {
@@ -29,6 +31,6 @@ public abstract class LuaFluidMethod extends LuaMethod
     @Override
     public boolean applies(TileEntity te)
     {
-        return te instanceof IFluidHandler;
+        return te.hasCapability(FLUID_HANDLER_CAPABILITY, EnumFacing.NORTH);
     }
 }

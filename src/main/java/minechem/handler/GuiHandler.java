@@ -1,6 +1,7 @@
 package minechem.handler;
 
-import cpw.mods.fml.common.network.IGuiHandler;
+import net.minecraft.util.math.BlockPos;
+import net.minecraftforge.fml.common.network.IGuiHandler;
 import minechem.apparatus.tier1.opticalMicroscope.OpticalMicroscopeContainer;
 import minechem.apparatus.tier1.opticalMicroscope.OpticalMicroscopeGUI;
 import minechem.apparatus.tier1.opticalMicroscope.OpticalMicroscopeTileEntity;
@@ -24,7 +25,8 @@ public class GuiHandler implements IGuiHandler
     @Override
     public Object getClientGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z)
     {
-        TileEntity tileEntity = world.getTileEntity(x, y, z);
+        BlockPos pos = new BlockPos(x, y, z);
+        TileEntity tileEntity = world.getTileEntity(pos);
         if (tileEntity != null)
         {
             // use instanceof to return the correct GUI object
@@ -50,7 +52,8 @@ public class GuiHandler implements IGuiHandler
     @Override
     public Object getServerGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z)
     {
-        TileEntity tileEntity = world.getTileEntity(x, y, z);
+        BlockPos pos = new BlockPos(x, y, z);
+        TileEntity tileEntity = world.getTileEntity(pos);
         if (tileEntity != null)
         {
             // use instanceof to return the correct container object

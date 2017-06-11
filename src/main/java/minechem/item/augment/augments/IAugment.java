@@ -1,13 +1,16 @@
 package minechem.item.augment.augments;
 
 import com.google.common.collect.Multimap;
-import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 public interface IAugment
@@ -44,7 +47,7 @@ public interface IAugment
     /**
      * @return true to make the block drop
      */
-    boolean onBlockDestroyed(ItemStack stack, World world, Block block, int x, int y, int z, EntityLivingBase entityLivingBase, int level);
+    boolean onBlockDestroyed(ItemStack stack, World world, IBlockState state, BlockPos pos, EntityLivingBase entityLivingBase, int level);
 
     /**
      * @return false to cancel drop
@@ -62,12 +65,12 @@ public interface IAugment
     /**
      * Callback for item usage. If the item does something special on right clicking, he will have one of those. Return True if something happen and false if it don't.
      */
-    boolean onItemUse(ItemStack stack, EntityPlayer player, World world, int x, int y, int z, int side, float hitX, float hitY, float hitZ, int level);
+    boolean onItemUse(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ, int level);
 
     /**
      * @return true to prevent further processing
      */
-    boolean onItemUseFirst(ItemStack stack, EntityPlayer player, World world, int x, int y, int z, int side, float hitX, float hitY, float hitZ, int level);
+    boolean onItemUseFirst(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ, int level);
 
     /**
      * Called when a entity tries to play the 'swing' animation.
@@ -116,9 +119,10 @@ public interface IAugment
 
     /**
      * @param prevDigSpeed unmodified dig speed
+     * @param state
      * @return
      */
-    float getModifiedDigSpeed(ItemStack stack, float prevDigSpeed, Block block, int metadata, int level);
+    float getModifiedDigSpeed(ItemStack stack, float prevDigSpeed, IBlockState state, int metadata, int level);
 
     /**
      * @param toolClass
@@ -129,7 +133,7 @@ public interface IAugment
     /**
      * @return Attribute Modifiers to the base tools attributes.
      */
-    Multimap<String, AttributeModifier> getAttributeModifiers(ItemStack stack, int level);
+    Multimap<String, AttributeModifier> getAttributeModifiers(EntityEquipmentSlot slot, ItemStack stack, int level);
 
     /**
      * @return float value between 0 and 1 indicating probability of damage not being applied to the tool

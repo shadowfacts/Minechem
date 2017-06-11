@@ -1,9 +1,9 @@
 package minechem.compatibility.openblocks;
 
-import cpw.mods.fml.common.event.FMLInterModComms;
 import minechem.Compendium;
 import minechem.compatibility.CompatBase;
 import minechem.helper.LogHelper;
+import net.minecraftforge.fml.common.event.FMLInterModComms;
 
 import java.lang.reflect.Method;
 

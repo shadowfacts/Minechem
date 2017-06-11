@@ -5,6 +5,9 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.ItemRenderer;
 import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.VertexBuffer;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.IIcon;
 import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
@@ -77,23 +80,24 @@ public class RenderHelper extends net.minecraft.client.renderer.RenderHelper
     }
 
     /**
-     * Draws a {@link net.minecraft.util.IIcon} on given x, y, z
+     * Draws a {@link TextureAtlasSprite} on given x, y, z
      *
      * @param x    xPos
      * @param y    yPos
      * @param z    zPos
      * @param w    icon width
      * @param h    icon height
-     * @param icon the {@link net.minecraft.util.IIcon}
+     * @param texture the {@link TextureAtlasSprite}
      */
-    public static void drawTexturedRectUV(float x, float y, float z, int w, int h, IIcon icon)
+    public static void drawTexturedRectUV(float x, float y, float z, int w, int h, TextureAtlasSprite texture)
     {
-        Tessellator tessellator = Tessellator.instance;
-        tessellator.startDrawingQuads();
-        tessellator.addVertexWithUV(x, y + h, z, icon.getMinU(), icon.getMaxV());
-        tessellator.addVertexWithUV(x + w, y + h, z, icon.getMaxU(), icon.getMaxV());
-        tessellator.addVertexWithUV(x + w, y, z, icon.getMaxU(), icon.getMinV());
-        tessellator.addVertexWithUV(x, y, z, icon.getMinU(), icon.getMinV());
+        Tessellator tessellator = Tessellator.getInstance();
+        VertexBuffer buf = tessellator.getBuffer();
+        buf.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
+        buf.pos(x, y + h, z).tex(texture.getMinU(), texture.getMaxV()).endVertex();
+        buf.pos(x + w, y + h, z).tex(texture.getMaxU(), texture.getMaxV()).endVertex();
+        buf.pos(x + w, y, z).tex(texture.getMaxU(), texture.getMinV()).endVertex();
+        buf.pos(x, y, z).tex(texture.getMinU(), texture.getMinV()).endVertex();
         tessellator.draw();
     }
 

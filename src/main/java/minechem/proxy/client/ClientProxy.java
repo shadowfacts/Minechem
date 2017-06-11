@@ -1,11 +1,10 @@
 package minechem.proxy.client;
 
-import cpw.mods.fml.client.FMLClientHandler;
-import cpw.mods.fml.client.registry.ClientRegistry;
-import cpw.mods.fml.client.registry.RenderingRegistry;
-import cpw.mods.fml.common.network.simpleimpl.MessageContext;
+import net.minecraftforge.fml.client.FMLClientHandler;
+import net.minecraftforge.fml.client.registry.ClientRegistry;
+import net.minecraftforge.fml.client.registry.RenderingRegistry;
+import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import minechem.Compendium;
-import minechem.apparatus.prefab.renderer.BasicItemRenderer;
 import minechem.apparatus.tier1.centrifuge.CentrifugeTileEntity;
 import minechem.apparatus.tier1.centrifuge.CentrifugeTileEntityRenderer;
 import minechem.apparatus.tier1.electricCrucible.ElectricCrucibleTileEntity;
@@ -37,37 +36,38 @@ public class ClientProxy extends CommonProxy
     @Override
     public World getClientWorld()
     {
-        return FMLClientHandler.instance().getClient().theWorld;
+        return FMLClientHandler.instance().getClient().world;
     }
 
     @Override
     public void registerRenderers()
     {
-        RENDER_ID = RenderingRegistry.getNextAvailableRenderId();
-        ISBRH_ID = RenderingRegistry.getNextAvailableRenderId();
-
-        OpticalMicroscopeTileEntityRenderer opticalMicroscopeRenderer = new OpticalMicroscopeTileEntityRenderer();
-        ClientRegistry.bindTileEntitySpecialRenderer(OpticalMicroscopeTileEntity.class, opticalMicroscopeRenderer);
-        MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(BlockRegistry.opticalMicroscope),
-            new BasicItemRenderer(opticalMicroscopeRenderer, new OpticalMicroscopeTileEntity()));
-
-        ElectrolysisTileEntityRenderer electrolysisRenderer = new ElectrolysisTileEntityRenderer();
-        ClientRegistry.bindTileEntitySpecialRenderer(ElectrolysisTileEntity.class, electrolysisRenderer);
-        MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(BlockRegistry.electrolysisBlock),
-            new BasicItemRenderer(electrolysisRenderer, new ElectrolysisTileEntity()));
-
-        ElectricCrucibleTileEntityRenderer electricCrucibleRenderer = new ElectricCrucibleTileEntityRenderer();
-        ClientRegistry.bindTileEntitySpecialRenderer(ElectricCrucibleTileEntity.class, electricCrucibleRenderer);
-        MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(BlockRegistry.electricCrucibleBlock),
-            new BasicItemRenderer(electricCrucibleRenderer, new ElectricCrucibleTileEntity()));
-
-        CentrifugeTileEntityRenderer centrifugeRenderer = new CentrifugeTileEntityRenderer();
-        ClientRegistry.bindTileEntitySpecialRenderer(CentrifugeTileEntity.class, centrifugeRenderer);
-        MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(BlockRegistry.centrifugeBlock),
-            new BasicItemRenderer(centrifugeRenderer, new CentrifugeTileEntity()));
-
-        RenderingRegistry.registerBlockHandler(BlockRegistry.blockLight.getRenderType(), new LightRenderer());
-        MinecraftForgeClient.registerItemRenderer(ItemRegistry.chemicalItem, new ChemicalItemRenderer());
+//        TODO: rendering
+//        RENDER_ID = RenderingRegistry.getNextAvailableRenderId();
+//        ISBRH_ID = RenderingRegistry.getNextAvailableRenderId();
+//
+//        OpticalMicroscopeTileEntityRenderer opticalMicroscopeRenderer = new OpticalMicroscopeTileEntityRenderer();
+//        ClientRegistry.bindTileEntitySpecialRenderer(OpticalMicroscopeTileEntity.class, opticalMicroscopeRenderer);
+//        MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(BlockRegistry.opticalMicroscope),
+//            new BasicItemRenderer(opticalMicroscopeRenderer, new OpticalMicroscopeTileEntity()));
+//
+//        ElectrolysisTileEntityRenderer electrolysisRenderer = new ElectrolysisTileEntityRenderer();
+//        ClientRegistry.bindTileEntitySpecialRenderer(ElectrolysisTileEntity.class, electrolysisRenderer);
+//        MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(BlockRegistry.electrolysisBlock),
+//            new BasicItemRenderer(electrolysisRenderer, new ElectrolysisTileEntity()));
+//
+//        ElectricCrucibleTileEntityRenderer electricCrucibleRenderer = new ElectricCrucibleTileEntityRenderer();
+//        ClientRegistry.bindTileEntitySpecialRenderer(ElectricCrucibleTileEntity.class, electricCrucibleRenderer);
+//        MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(BlockRegistry.electricCrucibleBlock),
+//            new BasicItemRenderer(electricCrucibleRenderer, new ElectricCrucibleTileEntity()));
+//
+//        CentrifugeTileEntityRenderer centrifugeRenderer = new CentrifugeTileEntityRenderer();
+//        ClientRegistry.bindTileEntitySpecialRenderer(CentrifugeTileEntity.class, centrifugeRenderer);
+//        MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(BlockRegistry.centrifugeBlock),
+//            new BasicItemRenderer(centrifugeRenderer, new CentrifugeTileEntity()));
+//
+//        RenderingRegistry.registerBlockHandler(BlockRegistry.blockLight.getRenderType(), new LightRenderer());
+//        MinecraftForgeClient.registerItemRenderer(ItemRegistry.chemicalItem, new ChemicalItemRenderer());
     }
 
     @Override
@@ -91,13 +91,13 @@ public class ClientProxy extends CommonProxy
     @Override
     public World getWorld(MessageContext context)
     {
-        return Minecraft.getMinecraft().theWorld;
+        return Minecraft.getMinecraft().world;
     }
 
     @Override
     public EntityPlayer getPlayer(MessageContext context)
     {
-        return Minecraft.getMinecraft().thePlayer;
+        return Minecraft.getMinecraft().player;
     }
 
     @Override
@@ -113,4 +113,5 @@ public class ClientProxy extends CommonProxy
             LogHelper.exception(font, Level.ERROR);
         }
     }
+
 }

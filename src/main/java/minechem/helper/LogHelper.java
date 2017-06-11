@@ -1,9 +1,10 @@
 package minechem.helper;
 
-import cpw.mods.fml.common.FMLLog;
 import minechem.Config;
 import minechem.Compendium;
 import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * Helper class for logging
@@ -12,6 +13,9 @@ import org.apache.logging.log4j.Level;
  */
 public class LogHelper
 {
+
+    private static final Logger log = LogManager.getLogger(Compendium.Naming.id);
+
     /**
      * Used for logging when debug is turned on in the config
      *
@@ -38,7 +42,7 @@ public class LogHelper
      */
     public static void exception(Object obj, Throwable exception, Level level)
     {
-        FMLLog.log(Compendium.Naming.id, level, exception, String.valueOf(obj));
+        log.log(level, String.valueOf(obj), exception);
     }
 
     /**
@@ -49,7 +53,7 @@ public class LogHelper
      */
     public static void exception(Throwable exception, Level level)
     {
-        FMLLog.log(Compendium.Naming.id, level, exception, exception.toString());
+        log.log(level, exception);
     }
 
     /**
@@ -80,6 +84,7 @@ public class LogHelper
      */
     public static void log(Level level, Object obj)
     {
-        FMLLog.log(Compendium.Naming.id, level, String.valueOf(obj));
+        log.log(level, String.valueOf(obj));
     }
+
 }

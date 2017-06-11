@@ -6,6 +6,7 @@ import cofh.lib.util.helpers.MathHelper;
 import java.util.List;
 import minechem.Compendium;
 import minechem.helper.LocalizationHelper;
+import net.minecraft.client.Minecraft;
 import org.lwjgl.opengl.GL11;
 
 /**
@@ -40,24 +41,17 @@ public abstract class BasicGuiTab extends TabBase
     }
 
     @Override
-    public void draw()
+    protected void drawForeground()
     {
-        super.draw();
-        if (isEnabled())
-        {
-            drawBackground();
-            drawTabIcon(getIcon());
-            if (isFullyOpened())
+        drawTabIcon(Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite(getIcon()));
+        if (isFullyOpened()) {
+            getFontRenderer().drawStringWithShadow(getTitle(), posXOffset() + 18, this.posY + 6, this.headerColor);
+            for (int i = this.firstLine; i < this.firstLine + this.numLines; i++)
             {
-                getFontRenderer().drawStringWithShadow(getTitle(), posXOffset() + 18, this.posY + 6, this.headerColor);
-                for (int i = this.firstLine; i < this.firstLine + this.numLines; i++)
-                {
-                    getFontRenderer().drawString(this.tabText.get(i), posXOffset() + 2, this.posY + 20 + (i - this.firstLine) * getFontRenderer().FONT_HEIGHT, this.textColor, true);
-                }
-                GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+                getFontRenderer().drawString(this.tabText.get(i), posXOffset() + 2, this.posY + 20 + (i - this.firstLine) * getFontRenderer().FONT_HEIGHT, this.textColor, true);
             }
+            GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
         }
-
     }
 
     public abstract String getIcon();

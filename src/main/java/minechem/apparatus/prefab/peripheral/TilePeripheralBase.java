@@ -1,16 +1,16 @@
 package minechem.apparatus.prefab.peripheral;
 
-import cpw.mods.fml.common.Optional;
-import dan200.computercraft.api.lua.ILuaContext;
-import dan200.computercraft.api.lua.LuaException;
-import dan200.computercraft.api.peripheral.IComputerAccess;
-import dan200.computercraft.api.peripheral.IPeripheral;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+
+import dan200.computercraft.api.lua.ILuaContext;
+import dan200.computercraft.api.lua.LuaException;
+import dan200.computercraft.api.peripheral.IComputerAccess;
+import dan200.computercraft.api.peripheral.IPeripheral;
 import li.cil.oc.api.Network;
 import li.cil.oc.api.machine.Arguments;
 import li.cil.oc.api.machine.Context;
@@ -26,7 +26,10 @@ import minechem.compatibility.ModList;
 import minechem.compatibility.lua.events.checked.CheckEvent;
 import minechem.compatibility.lua.methods.LuaMethod;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.ITickable;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.common.Optional;
 
 @Optional.InterfaceList(
     {
@@ -34,11 +37,11 @@ import net.minecraft.world.World;
         @Optional.Interface(iface = "li.cil.oc.api.network.Environment", modid = Compendium.Naming.Mods.openComputers),
         @Optional.Interface(iface = "li.cil.oc.api.network.ManagedPeripheral", modid = Compendium.Naming.Mods.openComputers)
     })
-public abstract class TilePeripheralBase extends BaseTileEntity implements ManagedPeripheral, Environment, IPeripheral
+public abstract class TilePeripheralBase extends BaseTileEntity implements ITickable, ManagedPeripheral, Environment, IPeripheral
 {
     protected final String name;
-    protected final Map<Integer, String> methodIDs = new LinkedHashMap<Integer, String>();
-    protected final Map<String, LuaMethod> methodNames = new LinkedHashMap<String, LuaMethod>();
+    protected final Map<Integer, String> methodIDs = new LinkedHashMap<>();
+    protected final Map<String, LuaMethod> methodNames = new LinkedHashMap<>();
     protected final List<CheckEvent> events = new ArrayList<CheckEvent>();
     private boolean initialize = true;
 
@@ -52,10 +55,9 @@ public abstract class TilePeripheralBase extends BaseTileEntity implements Manag
     }
 
     @Override
-    public void updateEntity()
+    public void update()
     {
-        super.updateEntity();
-        if (!worldObj.isRemote)
+        if (!world.isRemote)
         {
             serverUpdate();
         }
@@ -108,7 +110,7 @@ public abstract class TilePeripheralBase extends BaseTileEntity implements Manag
     }
 
     @Override
-    public void writeToNBT(NBTTagCompound compound)
+    public NBTTagCompound writeToNBT(NBTTagCompound compound)
     {
         super.writeToNBT(compound);
         if (ModList.opencomputers.isLoaded())
@@ -118,6 +120,12 @@ public abstract class TilePeripheralBase extends BaseTileEntity implements Manag
                 ((Component) node).save(compound);
             }
         }
+        return compound;
+    }
+
+    public String getName()
+    {
+        return name;
     }
 
     //####################Peripheral Stuff################
@@ -237,7 +245,7 @@ public abstract class TilePeripheralBase extends BaseTileEntity implements Manag
                 ((Component) node).remove();
             }
         }
-        this.onInvalidateOrUnload(worldObj, xCoord, yCoord, zCoord, false);
+        this.onInvalidateOrUnload(world, pos, false);
     }
 
     @Override
@@ -249,11 +257,11 @@ public abstract class TilePeripheralBase extends BaseTileEntity implements Manag
         {
             ((Component) node).remove();
         }
-        this.onInvalidateOrUnload(worldObj, xCoord, yCoord, zCoord, true);
+        this.onInvalidateOrUnload(world, pos, true);
     }
 
     @Optional.Method(modid = Compendium.Naming.Mods.openComputers)
-    protected void onInvalidateOrUnload(World world, int x, int y, int z, boolean invalid)
+    protected void onInvalidateOrUnload(World world, BlockPos pos, boolean invalid)
     {
     }
 

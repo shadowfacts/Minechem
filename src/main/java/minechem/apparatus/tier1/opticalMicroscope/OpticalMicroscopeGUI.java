@@ -11,15 +11,11 @@ import minechem.helper.ResearchHelper;
 import minechem.item.chemical.ChemicalItem;
 import minechem.proxy.client.render.RenderHelper;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.entity.RenderItem;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
+import org.lwjgl.opengl.GL11;
 
-/**
- *
- *
- */
 public class OpticalMicroscopeGUI extends BasicGuiContainer
 {
 
@@ -29,7 +25,6 @@ public class OpticalMicroscopeGUI extends BasicGuiContainer
     protected static final int eyePieceY = 16;
     protected static final int eyePieceW = 54;
     protected static final int eyePieceH = 54;
-    private RenderItem renderItem;
 
     public OpticalMicroscopeGUI(InventoryPlayer inventoryPlayer, OpticalMicroscopeTileEntity opticalMicroscope)
     {
@@ -37,7 +32,6 @@ public class OpticalMicroscopeGUI extends BasicGuiContainer
         this.opticalMicroscope = opticalMicroscope;
         texture = Compendium.Resource.GUI.opticalMicroscope;
         name = LocalizationHelper.getLocalString("tile.opticalMicroscope.name");
-        renderItem = new MicroscopeRenderItem(this);
     }
 
     public boolean isMouseInMicroscope()
@@ -100,7 +94,45 @@ public class OpticalMicroscopeGUI extends BasicGuiContainer
     public void drawScreen(int x, int y, float z)
     {
         super.drawScreen(x, y, z);
-        renderItem.renderItemAndEffectIntoGUI(fontRendererObj, this.mc.getTextureManager(), opticalMicroscope.getStackInSlot(0), x, y);
-        renderItem.renderItemAndEffectIntoGUI(fontRendererObj, this.mc.getTextureManager(), getContainer().getInventoryPlayer().getItemStack(), x, y);
+        renderItemAndEffectIntoGUI(opticalMicroscope.getStackInSlot(0), x, y);
+        renderItemAndEffectIntoGUI(getContainer().getInventoryPlayer().getItemStack(), x, y);
     }
+
+    private void renderItemAndEffectIntoGUI(ItemStack itemStack, int x, int y)
+    {
+        if (itemStack == null)
+        {
+            return;
+        }
+
+        RenderHelper.enableGUIStandardItemLighting();
+
+        Slot slot = inventorySlots.getSlotFromInventory(opticalMicroscope, 0);
+        if (slot.getStack() != null)
+        {
+            GL11.glPushMatrix();
+            RenderHelper.setScissor(xSize, ySize, OpticalMicroscopeGUI.eyePieceX, OpticalMicroscopeGUI.eyePieceY, OpticalMicroscopeGUI.eyePieceW, OpticalMicroscopeGUI.eyePieceH);
+            int renderX = guiLeft + slot.xPos;
+            int renderY = guiTop + slot.yPos;
+            GL11.glTranslatef(renderX, renderY, 0.0F);
+            GL11.glScalef(3.0F, 3.0F, 1.0F);
+            GL11.glTranslatef(-renderX - 5.4F, -renderY - 4.5F, 540.0F);
+            Minecraft.getMinecraft().getRenderItem().renderItemAndEffectIntoGUI(slot.getStack(), renderX, renderY);
+            RenderHelper.stopScissor();
+            GL11.glPopMatrix();
+        }
+
+        if (itemStack == getContainer().getInventoryPlayer().getItemStack() && isMouseInMicroscope())
+        {
+            GL11.glPushMatrix();
+            RenderHelper.setScissor(xSize, ySize, OpticalMicroscopeGUI.eyePieceX, OpticalMicroscopeGUI.eyePieceY, OpticalMicroscopeGUI.eyePieceW, OpticalMicroscopeGUI.eyePieceH);
+            GL11.glTranslatef(x, y, 0.0F);
+            GL11.glScalef(3.0F, 3.0F, 1.0F);
+            GL11.glTranslatef(-x - 8.0F, -y - 8.0F, 540.0F);
+            Minecraft.getMinecraft().getRenderItem().renderItemAndEffectIntoGUI(itemStack, x, y);
+            RenderHelper.stopScissor();
+            GL11.glPopMatrix();
+        }
+    }
+
 }

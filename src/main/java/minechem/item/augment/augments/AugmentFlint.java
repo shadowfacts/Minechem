@@ -2,9 +2,12 @@ package minechem.item.augment.augments;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
+import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.SoundCategory;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraftforge.common.util.ForgeDirection;
 
 public class AugmentFlint extends AugmentBase
 {
@@ -20,18 +23,15 @@ public class AugmentFlint extends AugmentBase
     }
 
     @Override
-    public boolean onItemUse(ItemStack stack, EntityPlayer player, World world, int x, int y, int z, int side, float hitX, float hitY, float hitZ, int level)
+    public boolean onItemUse(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ, int level)
     {
-        ForgeDirection dir = ForgeDirection.getOrientation(side);
-        x += dir.offsetX;
-        y += dir.offsetY;
-        z += dir.offsetZ;
-        if (!world.isRemote && player != null && player.isSneaking() && player.canPlayerEdit(x, y, z, side, null) && world.isAirBlock(x, y, z) && Blocks.fire.canPlaceBlockAt(world, x, y, z))
+        pos = pos.offset(side);
+        if (!world.isRemote && player != null && player.isSneaking() && player.canPlayerEdit(pos, side, null) && world.isAirBlock(pos) && Blocks.FIRE.canPlaceBlockAt(world, pos))
         {
             if (consumeAugment(stack, level) > -1)
             {
-                world.playSoundEffect((double) x + 0.5D, (double) y + 0.5D, (double) z + 0.5D, "fire.ignite", 1.0F, rand.nextFloat() * 0.4F + 0.8F);
-                world.setBlock(x, y, z, Blocks.fire);
+                world.playSound(player, pos, SoundEvents.ITEM_FLINTANDSTEEL_USE, SoundCategory.BLOCKS, 1f, rand.nextFloat() * 0.4f + 0.8f);
+                world.setBlockState(pos, Blocks.FIRE.getDefaultState(), 11);
             }
         }
         return false;

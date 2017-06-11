@@ -1,7 +1,6 @@
 package minechem.asm;
 
-import codechicken.core.launch.DepLoader;
-import cpw.mods.fml.relauncher.IFMLLoadingPlugin;
+import net.minecraftforge.fml.relauncher.IFMLLoadingPlugin;
 import java.util.Map;
 import net.minecraftforge.classloading.FMLForgePlugin;
 
@@ -15,7 +14,8 @@ public class LoadingPlugin implements IFMLLoadingPlugin
 
     public LoadingPlugin()
     {
-        DepLoader.load();
+//        TODO: is this still necessary?
+//        DepLoader.load();
     }
 
     @Override
@@ -50,4 +50,5 @@ public class LoadingPlugin implements IFMLLoadingPlugin
     {
         return "minechem.asm.MinechemTransformer";
     }
+
 }

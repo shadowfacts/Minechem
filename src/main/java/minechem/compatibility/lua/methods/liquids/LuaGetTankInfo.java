@@ -4,9 +4,10 @@ import java.util.HashMap;
 import java.util.Map;
 import minechem.Compendium;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraftforge.common.util.ForgeDirection;
-import net.minecraftforge.fluids.FluidTankInfo;
-import net.minecraftforge.fluids.IFluidHandler;
+import net.minecraft.util.EnumFacing;
+import net.minecraftforge.fluids.capability.IFluidTankProperties;
+
+import static net.minecraftforge.fluids.capability.CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY;
 
 public class LuaGetTankInfo extends LuaFluidMethod
 {
@@ -18,27 +19,23 @@ public class LuaGetTankInfo extends LuaFluidMethod
     @Override
     public Object[] action(TileEntity te, Object[] args) throws Exception
     {
-        ForgeDirection direction;
+        EnumFacing facing;
         if (args.length == 0)
         {
-            direction = ForgeDirection.UNKNOWN;
+            facing = EnumFacing.NORTH;
         } else
         {
-            direction = ForgeDirection.valueOf((String) args[1]);
-            if (direction == null)
-            {
-                throw new Exception("Invalid Direction");
-            }
+            facing = EnumFacing.valueOf((String) args[1]);
         }
         return new Object[]
         {
-            tanksToMap(((IFluidHandler) te).getTankInfo(direction))
+            tanksToMap(te.getCapability(FLUID_HANDLER_CAPABILITY, facing).getTankProperties())
         };
     }
 
-    public static Map<Number, Object> tanksToMap(FluidTankInfo[] tanks)
+    public static Map<Number, Map<String, Object>> tanksToMap(IFluidTankProperties[] tanks)
     {
-        Map<Number, Object> result = new HashMap<Number, Object>();
+        Map<Number, Map<String, Object>> result = new HashMap<>();
         for (int i = 0; i < tanks.length; i++)
         {
             if (tanks[i] != null)
@@ -49,15 +46,16 @@ public class LuaGetTankInfo extends LuaFluidMethod
         return result;
     }
 
-    public static Map<String, Object> getTankMap(FluidTankInfo tank)
+    public static Map<String, Object> getTankMap(IFluidTankProperties tank)
     {
         Map<String, Object> result = new HashMap<String, Object>();
-        if (tank.fluid != null)
+        if (tank.getContents() != null)
         {
-            result.put(Compendium.NBTTags.fluid, tank.fluid.getFluid().getName());
-            result.put(Compendium.NBTTags.amount, tank.fluid.amount);
+            result.put(Compendium.NBTTags.fluid, tank.getContents().getFluid().getName());
+            result.put(Compendium.NBTTags.amount, tank.getContents().amount);
         }
-        result.put(Compendium.NBTTags.capacity, tank.capacity);
+        result.put(Compendium.NBTTags.capacity, tank.getCapacity());
         return result;
     }
+
 }

@@ -20,15 +20,11 @@ import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemAxe;
-import net.minecraft.item.ItemHoe;
-import net.minecraft.item.ItemPickaxe;
-import net.minecraft.item.ItemSpade;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.ItemSword;
+import net.minecraft.inventory.EntityEquipmentSlot;
+import net.minecraft.item.*;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.nbt.NBTTagString;
@@ -40,7 +36,7 @@ public class AugmentedItem extends WrapperItem implements IAugmentedItem, IOverl
 {
     public static final String augmentList = "augments";
     public static final String level = "level";
-    public static final UUID itemUUID = field_111210_e;
+    public static final UUID ATTACK_DAMAGE_UUID = ATTACK_DAMAGE_MODIFIER;
     private static int DEFAULTICON = 0;
     private static int AXEICON = 1;
     private static int HOEICON = 2;
@@ -48,76 +44,51 @@ public class AugmentedItem extends WrapperItem implements IAugmentedItem, IOverl
     private static int SHOVELICON = 4;
     private static int SWORDICON = 5;
 
-    @SideOnly(Side.CLIENT)
-    protected IIcon[] augmentIcon;
-
     public AugmentedItem()
     {
         super("augmented");
-        // augmented types are sword, shovel, pickaxe, hoe, axe
-        augmentIcon = new IIcon[6];
     }
 
-    @Override
-    @SideOnly(Side.CLIENT)
-    public void registerIcons(IIconRegister iconRegister)
-    {
-        // there's got to be a better way to register these...maybe a map?
-
-        augmentIcon[DEFAULTICON] = iconRegister.registerIcon(Compendium.Naming.id + ":augment/augmentedDefaultIcon");
-        augmentIcon[AXEICON] = iconRegister.registerIcon(Compendium.Naming.id + ":augment/augmentedAxeIcon");
-        augmentIcon[HOEICON] = iconRegister.registerIcon(Compendium.Naming.id + ":augment/augmentedHoeIcon");
-        augmentIcon[PICKICON] = iconRegister.registerIcon(Compendium.Naming.id + ":augment/augmentedPickaxeIcon");
-        augmentIcon[SHOVELICON] = iconRegister.registerIcon(Compendium.Naming.id + ":augment/augmentedShovelIcon");
-        augmentIcon[SWORDICON] = iconRegister.registerIcon(Compendium.Naming.id + ":augment/augmentedSwordIcon");
-    }
-
-    @SideOnly(Side.CLIENT)
-    @Override
-    public IIcon getIconFromDamage(int p_77617_1_)
-    {
-        return augmentIcon[DEFAULTICON];
-    }
-
-    @Override
-    public void renderOverlay(FontRenderer fontRenderer, TextureManager textureManager, ItemStack itemStack, int left, int top, float z)
-    {
-        RenderHelper.enableBlend();
-        RenderHelper.setOpacity(1.0F);
-        textureManager.bindTexture(TextureMap.locationItemsTexture);
-        ItemStack wrappedItemStack = getWrappedItemStack(itemStack);
-        if (wrappedItemStack != null)
-        {
-            Item wrappedItem = wrappedItemStack.getItem();
-            if (wrappedItem instanceof ItemAxe)
-            {
-                RenderHelper.drawTexturedRectUV(left, top, z + 10, 16, 16, augmentIcon[AXEICON]);
-            } else if (wrappedItem instanceof ItemHoe)
-            {
-                RenderHelper.drawTexturedRectUV(left, top, z + 10, 16, 16, augmentIcon[HOEICON]);
-            } else if (wrappedItem instanceof ItemPickaxe)
-            {
-                RenderHelper.drawTexturedRectUV(left, top, z + 10, 16, 16, augmentIcon[PICKICON]);
-            } else if (wrappedItem instanceof ItemSpade)
-            {
-                RenderHelper.drawTexturedRectUV(left, top, z + 10, 16, 16, augmentIcon[SHOVELICON]);
-            } else if (wrappedItem instanceof ItemSword)
-            {
-                RenderHelper.drawTexturedRectUV(left, top, z + 10, 16, 16, augmentIcon[SWORDICON]);
-            } else
-            {
-                RenderHelper.drawTexturedRectUV(left, top, z + 10, 16, 16, augmentIcon[DEFAULTICON]);
-            }
-        }
-
-        RenderHelper.resetOpacity();
-        RenderHelper.disableBlend();
-    }
+//    TODO: augment models
+//    @Override
+//    public void renderOverlay(FontRenderer fontRenderer, TextureManager textureManager, ItemStack itemStack, int left, int top, float z)
+//    {
+//        RenderHelper.enableBlend();
+//        RenderHelper.setOpacity(1.0F);
+//        textureManager.bindTexture(TextureMap.locationItemsTexture);
+//        ItemStack wrappedItemStack = getWrappedItemStack(itemStack);
+//        if (wrappedItemStack != null)
+//        {
+//            Item wrappedItem = wrappedItemStack.getItem();
+//            if (wrappedItem instanceof ItemAxe)
+//            {
+//                RenderHelper.drawTexturedRectUV(left, top, z + 10, 16, 16, augmentIcon[AXEICON]);
+//            } else if (wrappedItem instanceof ItemHoe)
+//            {
+//                RenderHelper.drawTexturedRectUV(left, top, z + 10, 16, 16, augmentIcon[HOEICON]);
+//            } else if (wrappedItem instanceof ItemPickaxe)
+//            {
+//                RenderHelper.drawTexturedRectUV(left, top, z + 10, 16, 16, augmentIcon[PICKICON]);
+//            } else if (wrappedItem instanceof ItemSpade)
+//            {
+//                RenderHelper.drawTexturedRectUV(left, top, z + 10, 16, 16, augmentIcon[SHOVELICON]);
+//            } else if (wrappedItem instanceof ItemSword)
+//            {
+//                RenderHelper.drawTexturedRectUV(left, top, z + 10, 16, 16, augmentIcon[SWORDICON]);
+//            } else
+//            {
+//                RenderHelper.drawTexturedRectUV(left, top, z + 10, 16, 16, augmentIcon[DEFAULTICON]);
+//            }
+//        }
+//
+//        RenderHelper.resetOpacity();
+//        RenderHelper.disableBlend();
+//    }
 
     @Override
     public boolean isWrappable(ItemStack stack)
     {
-        return stack.getItem().isItemTool(stack) && !(stack.getItem() instanceof WrapperItem) && getWrappedItemStack(stack) == null;
+        return stack.getItem() instanceof ItemTool && !(stack.getItem() instanceof WrapperItem) && getWrappedItemStack(stack) == null;
     }
 
     @Override
@@ -270,7 +241,7 @@ public class AugmentedItem extends WrapperItem implements IAugmentedItem, IOverl
         boolean result = super.onBlockDestroyed(stack, world, block, x, y, z, entityLivingBase);
         for (Map.Entry<IAugment, Integer> entry : getAugments(stack).entrySet())
         {
-            result |= entry.getKey().onBlockDestroyed(stack, world, block, x, y, z, entityLivingBase, entry.getValue());
+            result |= entry.getKey().onBlockDestroyed(stack, world, block, , x, entityLivingBase, entry.getValue());
         }
         return result;
     }
@@ -311,7 +282,7 @@ public class AugmentedItem extends WrapperItem implements IAugmentedItem, IOverl
         }
         for (Map.Entry<IAugment, Integer> entry : getAugments(stack).entrySet())
         {
-            result |= entry.getKey().onItemUse(stack, player, world, x, y, z, side, hitX, hitY, hitZ, entry.getValue());
+            result |= entry.getKey().onItemUse(stack, player, world, , x, side, hitX, hitY, hitZ, entry.getValue());
         }
         return result;
     }
@@ -326,7 +297,7 @@ public class AugmentedItem extends WrapperItem implements IAugmentedItem, IOverl
         }
         for (Map.Entry<IAugment, Integer> entry : getAugments(stack).entrySet())
         {
-            result |= entry.getKey().onItemUseFirst(stack, player, world, x, y, z, side, hitX, hitY, hitZ, entry.getValue());
+            result |= entry.getKey().onItemUseFirst(stack, player, world, , x, side, hitX, hitY, hitZ, entry.getValue());
         }
         return result;
     }
@@ -448,12 +419,12 @@ public class AugmentedItem extends WrapperItem implements IAugmentedItem, IOverl
     }
 
     @Override
-    public Multimap getAttributeModifiers(ItemStack stack)
+    public Multimap<String, AttributeModifier> getAttributeModifiers(EntityEquipmentSlot slot, ItemStack stack)
     {
-        Multimap result = super.getAttributeModifiers(stack);
+        Multimap result = super.getAttributeModifiers(slot, stack);
         for (Map.Entry<IAugment, Integer> entry : getAugments(stack).entrySet())
         {
-            result.putAll(entry.getKey().getAttributeModifiers(stack, entry.getValue()));
+            result.putAll(entry.getKey().getAttributeModifiers(slot, stack, entry.getValue()));
         }
         return result;
     }

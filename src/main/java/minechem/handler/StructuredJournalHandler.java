@@ -4,7 +4,6 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.gson.stream.JsonReader;
-import cpw.mods.fml.common.registry.GameRegistry;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -31,6 +30,8 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.JsonToNBT;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import org.apache.logging.log4j.Level;
 
 public class StructuredJournalHandler
@@ -195,50 +196,28 @@ public class StructuredJournalHandler
             } else
             {
                 ItemStack stack = null;
-                String id;
-                String[] split;
+                ResourceLocation id;
                 int damage = object.has("damage") ? object.get("damage").getAsInt() : 0;
                 NBTTagCompound tagCompound;
                 try
                 {
-                    tagCompound = object.has("nbt") ? (NBTTagCompound) JsonToNBT.func_150315_a(object.get("nbt").getAsString()) : null;
+                    tagCompound = object.has("nbt") ? (NBTTagCompound) JsonToNBT.getTagFromJson(object.get("nbt").getAsString()) : null;
                 } catch (Exception e)
                 {
                     tagCompound = null;
                 }
                 if (object.has("item"))
                 {
-                    id = object.get("item").getAsString();
-                    if (!id.contains(":"))
-                    {
-                        return null;
-                    }
-                    split = id.split(":");
-                    if (split.length != 2)
-                    {
-                        return null;
-                    }
-                    Item item = GameRegistry.findItem(split[0], split[1]);
+                    id = new ResourceLocation(object.get("item").getAsString());
+                    Item item = ForgeRegistries.ITEMS.getValue(id);
                     if (item != null)
                     {
                         stack = new ItemStack(item, 1, damage);
-                    } else
-                    {
-                        stack = GameRegistry.findItemStack(split[0], split[1], 1);
                     }
                 } else if (object.has("block"))
                 {
-                    id = object.get("block").getAsString();
-                    if (!id.contains(":"))
-                    {
-                        return null;
-                    }
-                    split = id.split(":");
-                    if (split.length != 2)
-                    {
-                        return null;
-                    }
-                    Block block = GameRegistry.findBlock(split[0], split[1]);
+                    id = new ResourceLocation(object.get("block").getAsString());
+                    Block block = ForgeRegistries.BLOCKS.getValue(id);
                     if (block != null)
                     {
                         stack = new ItemStack(block, 1, damage % 16);

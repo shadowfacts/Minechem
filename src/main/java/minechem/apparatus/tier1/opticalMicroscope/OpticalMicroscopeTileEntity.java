@@ -11,15 +11,4 @@ public class OpticalMicroscopeTileEntity extends BasicInventoryTileEntity
         super(Compendium.Naming.opticalMicroscope, 1);
     }
 
-    @Override
-    public String getInventoryName()
-    {
-        return Compendium.Naming.opticalMicroscope;
-    }
-
-    @Override
-    public void updateEntity()
-    {
-    }
-
 }

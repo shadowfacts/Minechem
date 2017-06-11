@@ -6,7 +6,7 @@ import minechem.helper.ColourHelper;
 import minechem.helper.LocalizationHelper;
 import minechem.Compendium;
 import net.minecraft.client.renderer.texture.TextureMap;
-import net.minecraft.util.IIcon;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.IFluidTank;
 import org.lwjgl.input.Mouse;
@@ -79,29 +79,31 @@ public class GuiFluidTank extends GuiElement
 
         if (fluidStack != null && fluidStack.amount > 0)
         {
-            bindTexture(TextureMap.locationBlocksTexture);
-
-            IIcon fluidIcon = fluidStack.getFluid().getStillIcon();
-            // Top left corner
-            drawTexturedModelRectFromIcon(guiLeft + posX + 1, guiTop + posY + 2, fluidIcon, iconWidthRemainder, iconHeightRemainder);
-            for (int i = 0; i <= (width - 4) / 16; i++)
-            {
-                // Top right only draw when more then 1 pass is needed
-                if (i > 0)
-                {
-                    drawTexturedModelRectFromIcon(guiLeft + posX + 1 + (i - 1) * 16 + iconWidthRemainder, guiTop + posY + 2, fluidIcon, 16, iconHeightRemainder);
-                }
-                for (int ii = 0; ii < (height - 6) / 16; ii++)
-                {
-                    // Bottom right only draw when more then 1 pass is needed
-                    if (i > 0)
-                    {
-                        drawTexturedModelRectFromIcon(guiLeft + posX + 1 + (i - 1) * 16 + iconWidthRemainder, guiTop + posY + 2 + ii * 16 + iconHeightRemainder, fluidIcon, 16, 16);
-                    }
-                    // Bottom left
-                    drawTexturedModelRectFromIcon(guiLeft + posX + 1, guiTop + posY + 2 + ii * 16 + iconHeightRemainder, fluidIcon, iconWidthRemainder, 16);
-                }
-            }
+//            TODO: fixme
+//            bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
+//
+//            ResourceLocation fluidTex = fluidStack.getFluid().getStill(fluidStack);
+//            // Top left corner
+//
+//            drawTexturedModelRectFromIcon(guiLeft + posX + 1, guiTop + posY + 2, fluidTex, iconWidthRemainder, iconHeightRemainder);
+//            for (int i = 0; i <= (width - 4) / 16; i++)
+//            {
+//                // Top right only draw when more then 1 pass is needed
+//                if (i > 0)
+//                {
+//                    drawTexturedModelRectFromIcon(guiLeft + posX + 1 + (i - 1) * 16 + iconWidthRemainder, guiTop + posY + 2, fluidTex, 16, iconHeightRemainder);
+//                }
+//                for (int ii = 0; ii < (height - 6) / 16; ii++)
+//                {
+//                    // Bottom right only draw when more then 1 pass is needed
+//                    if (i > 0)
+//                    {
+//                        drawTexturedModelRectFromIcon(guiLeft + posX + 1 + (i - 1) * 16 + iconWidthRemainder, guiTop + posY + 2 + ii * 16 + iconHeightRemainder, fluidTex, 16, 16);
+//                    }
+//                    // Bottom left
+//                    drawTexturedModelRectFromIcon(guiLeft + posX + 1, guiTop + posY + 2 + ii * 16 + iconHeightRemainder, fluidTex, iconWidthRemainder, 16);
+//                }
+//            }
 
             bindTexture(Compendium.Resource.GUI.Element.fluidTank);
             drawTexturedModalRect(guiLeft + posX + 2, guiTop + posY + 1, 1, 1, 15, 37 - ((int) ((38) * ((float) fluidStack.amount / tank.getCapacity()))), width - 3, height - 2 - ((int) ((height - 1) * ((float) fluidStack.amount / tank.getCapacity()))));

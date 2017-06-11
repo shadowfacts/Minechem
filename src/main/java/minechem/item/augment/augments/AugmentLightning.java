@@ -1,10 +1,11 @@
 package minechem.item.augment.augments;
 
-import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.effect.EntityLightningBolt;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 public class AugmentLightning extends AugmentBase
@@ -15,11 +16,11 @@ public class AugmentLightning extends AugmentBase
     }
 
     @Override
-    public boolean onBlockDestroyed(ItemStack stack, World world, Block block, int x, int y, int z, EntityLivingBase entityLivingBase, int level)
+    public boolean onBlockDestroyed(ItemStack stack, World world, IBlockState state, BlockPos pos, EntityLivingBase entityLivingBase, int level)
     {
         if (rand.nextInt(75) <= level)
         {
-            spawnLightning(world, x + rand.nextDouble(), y + rand.nextDouble(), z + rand.nextDouble(), stack, level);
+            spawnLightning(world, pos.getX() + rand.nextDouble(), pos.getY() + rand.nextDouble(), pos.getZ() + rand.nextDouble(), stack, level);
         }
         return false;
     }
@@ -29,7 +30,7 @@ public class AugmentLightning extends AugmentBase
     {
         if (rand.nextInt(15) <= level)
         {
-            spawnLightning(user.worldObj, target.posX, target.posY, target.posZ, stack, level);
+            spawnLightning(user.world, target.posX, target.posY, target.posZ, stack, level);
         }
         return false;
     }
@@ -51,7 +52,7 @@ public class AugmentLightning extends AugmentBase
             if (level >= 0)
             {
                 consumeAugment(stack, level);
-                world.addWeatherEffect(new EntityLightningBolt(world, x, y, z));
+                world.addWeatherEffect(new EntityLightningBolt(world, x, y, z, false));
             }
         }
     }

@@ -1,8 +1,10 @@
 package minechem.compatibility.lua.methods.inventory;
 
 import minechem.compatibility.lua.methods.LuaMethod;
-import net.minecraft.inventory.IInventory;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumFacing;
+
+import static net.minecraftforge.items.CapabilityItemHandler.ITEM_HANDLER_CAPABILITY;
 
 public abstract class LuaInventoryMethod extends LuaMethod
 {
@@ -24,6 +26,6 @@ public abstract class LuaInventoryMethod extends LuaMethod
     @Override
     public boolean applies(TileEntity te)
     {
-        return te instanceof IInventory;
+        return te.hasCapability(ITEM_HANDLER_CAPABILITY, EnumFacing.NORTH);
     }
 }

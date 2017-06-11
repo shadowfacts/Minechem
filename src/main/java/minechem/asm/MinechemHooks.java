@@ -7,7 +7,7 @@ import minechem.item.IOverlay;
 import minechem.proxy.client.render.RenderHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.client.renderer.entity.RenderItem;
+import net.minecraft.client.renderer.RenderItem;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.item.ItemStack;
 import net.minecraft.stats.Achievement;
@@ -36,7 +36,7 @@ public class MinechemHooks
             ((IAchievementRenderer) achievement).renderIcon(fontRenderer, textureManager, itemStack, x, y);
         } else
         {
-            renderItem.renderItemAndEffectIntoGUI(fontRenderer, textureManager, itemStack, x, y);
+            renderItem.renderItemAndEffectIntoGUI(itemStack, x, y);
         }
     }
 

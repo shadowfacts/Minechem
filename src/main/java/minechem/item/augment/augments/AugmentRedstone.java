@@ -3,8 +3,9 @@ package minechem.item.augment.augments;
 import minechem.registry.BlockRegistry;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraftforge.common.util.ForgeDirection;
 
 public class AugmentRedstone extends AugmentBase
 {
@@ -31,19 +32,17 @@ public class AugmentRedstone extends AugmentBase
     }
 
     @Override
-    public boolean onItemUse(ItemStack stack, EntityPlayer player, World world, int x, int y, int z, int side, float hitX, float hitY, float hitZ, int level)
+    public boolean onItemUse(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ, int level)
     {
-        ForgeDirection dir = ForgeDirection.getOrientation(side);
-        x += dir.offsetX;
-        y += dir.offsetY;
-        z += dir.offsetZ;
-        if (!world.isRemote && player != null && player.canPlayerEdit(x, y, z, side, null))
+        pos = pos.offset(side);
+        if (!world.isRemote && player != null && player.canPlayerEdit(pos, side, null))
         {
-            if (world.isAirBlock(x, y, z))
+            if (world.isAirBlock(pos))
             {
-                world.setBlock(x, y, z, BlockRegistry.blockRedstone, levels[level], 7);
+                world.setBlockState(pos, BlockRegistry.blockRedstone.forLevel(levels[level]), 7);
             }
         }
         return false;
     }
+
 }

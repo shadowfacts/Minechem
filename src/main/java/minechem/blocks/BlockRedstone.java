@@ -7,112 +7,124 @@ import net.minecraft.block.Block;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.material.MaterialTransparent;
+import net.minecraft.block.properties.PropertyInteger;
+import net.minecraft.block.state.BlockStateContainer;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.EnumBlockRenderType;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
+import javax.annotation.Nullable;
+
 public class BlockRedstone extends Block
 {
-    public static final Material myAir = new MaterialTransparent(MapColor.airColor);
+    private static final Material myAir = new MaterialTransparent(MapColor.AIR);
+
+    private static final PropertyInteger POWER = PropertyInteger.create("power", 0, 15);
 
     public BlockRedstone()
     {
         super(myAir);
-        this.setBlockName(Compendium.Naming.redstone);
-        this.setBlockTextureName(Compendium.Naming.id + ":blankIcon");
+        this.setUnlocalizedName(Compendium.Naming.redstone);
+        this.setRegistryName(Compendium.Naming.redstone);
     }
 
-    @Override
-    public int getRenderType()
+    public IBlockState forLevel(int level)
     {
-        return -1;
+        return getDefaultState().withProperty(POWER, level);
     }
 
     @Override
-    public AxisAlignedBB getCollisionBoundingBoxFromPool(World world, int x, int y, int z)
+    protected BlockStateContainer createBlockState()
+    {
+        return new BlockStateContainer(this, POWER);
+    }
+
+    @Override
+    @Deprecated
+    public EnumBlockRenderType getRenderType(IBlockState state)
+    {
+        return EnumBlockRenderType.INVISIBLE;
+    }
+
+    @Nullable
+    @Override
+    public AxisAlignedBB getCollisionBoundingBox(IBlockState blockState, World worldIn, BlockPos pos)
     {
         return null;
     }
 
     @Override
-    public boolean canCollideCheck(int meta, boolean boat)
+    public boolean canCollideCheck(IBlockState state, boolean hitIfLiquid)
     {
         return false;
     }
 
     @Override
-    public void dropBlockAsItemWithChance(World world, int x, int y, int z, int meta, float dropChance, int fortune)
+    public void dropBlockAsItemWithChance(World worldIn, BlockPos pos, IBlockState state, float chance, int fortune)
     {
     }
 
     @Override
-    public void onBlockAdded(World world, int x, int y, int z)
+    public void onBlockAdded(World world, BlockPos pos, IBlockState state)
     {
-        world.scheduleBlockUpdate(x, y, z, this, 20);
-        secondOrderNotify(world, x, y, z);
+        world.scheduleBlockUpdate(pos, this, 20, 1);
+        world.notifyNeighborsOfStateChange(pos, this);
     }
 
+
     @Override
-    public void updateTick(World world, int x, int y, int z, Random rand)
+    public void updateTick(World world, BlockPos pos, IBlockState state, Random rand)
     {
-        if (world.getBlock(x, y, z) == this)
+        if (world.getBlockState(pos).getBlock() == this)
         {
-            world.setBlockToAir(x, y, z);
-            secondOrderNotify(world, x, y, z);
+            world.setBlockToAir(pos);
+            world.notifyNeighborsOfStateChange(pos, this);
         }
     }
 
     @Override
-    public boolean isOpaqueCube()
+    @Deprecated
+    public boolean isOpaqueCube(IBlockState state)
+    {
+        return false;
+    }
+
+
+    @Override
+    @Deprecated
+    public int getWeakPower(IBlockState blockState, IBlockAccess world, BlockPos pos, EnumFacing side)
+    {
+        return blockState.getValue(POWER);
+    }
+
+    @Override
+    public int getStrongPower(IBlockState blockState, IBlockAccess world, BlockPos pos, EnumFacing side)
+    {
+        return blockState.getValue(POWER);
+    }
+
+    @Override
+    public boolean canHarvestBlock(IBlockAccess world, BlockPos pos, EntityPlayer player)
     {
         return false;
     }
 
     @Override
-    public boolean renderAsNormalBlock()
-    {
-        return false;
-    }
-
-    @Override
-    public int isProvidingWeakPower(IBlockAccess world, int x, int y, int z, int side)
-    {
-        return world.getBlockMetadata(x, y, z);
-    }
-
-    @Override
-    public int isProvidingStrongPower(IBlockAccess world, int x, int y, int z, int side)
-    {
-        return world.getBlockMetadata(x, y, z);
-    }
-
-    @Override
-    public boolean canHarvestBlock(EntityPlayer player, int meta)
-    {
-        return false;
-    }
-
-    @Override
-    public boolean canProvidePower()
+    @Deprecated
+    public boolean canProvidePower(IBlockState state)
     {
         return true;
     }
 
     @Override
-    public boolean canConnectRedstone(IBlockAccess world, int x, int y, int z, int side)
+    public boolean canConnectRedstone(IBlockState state, IBlockAccess world, BlockPos pos, EnumFacing side)
     {
         return false;
     }
 
-    public void secondOrderNotify(World world, int x, int y, int z)
-    {
-        world.notifyBlocksOfNeighborChange(x, y, z, this);
-        world.notifyBlocksOfNeighborChange(x - 1, y, z, this);
-        world.notifyBlocksOfNeighborChange(x + 1, y, z, this);
-        world.notifyBlocksOfNeighborChange(x, y, z - 1, this);
-        world.notifyBlocksOfNeighborChange(x, y, z + 1, this);
-        world.notifyBlocksOfNeighborChange(x, y - 1, z, this);
-        world.notifyBlocksOfNeighborChange(x, y + 1, z, this);
-    }
 }

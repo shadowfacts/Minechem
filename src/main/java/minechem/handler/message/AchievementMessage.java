@@ -1,8 +1,8 @@
 package minechem.handler.message;
 
-import cpw.mods.fml.common.network.simpleimpl.IMessage;
-import cpw.mods.fml.common.network.simpleimpl.IMessageHandler;
-import cpw.mods.fml.common.network.simpleimpl.MessageContext;
+import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
+import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
+import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import io.netty.buffer.ByteBuf;
 import minechem.chemical.Element;
 import minechem.helper.AchievementHelper;
@@ -11,7 +11,7 @@ import minechem.registry.ElementRegistry;
 /**
  * Used for triggering achievements from Client only code
  */
-public class AchievementMessage extends BaseTEMessage implements IMessageHandler<AchievementMessage, IMessage>
+public class AchievementMessage extends BaseMessage implements IMessageHandler<AchievementMessage, IMessage>
 {
     private String achievement;
     private boolean isElement;
@@ -61,4 +61,5 @@ public class AchievementMessage extends BaseTEMessage implements IMessageHandler
         }
         return null;
     }
+
 }

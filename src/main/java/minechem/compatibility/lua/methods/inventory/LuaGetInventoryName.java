@@ -1,7 +1,7 @@
 package minechem.compatibility.lua.methods.inventory;
 
-import net.minecraft.inventory.IInventory;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.world.IWorldNameable;
 
 public class LuaGetInventoryName extends LuaInventoryMethod
 {
@@ -15,7 +15,14 @@ public class LuaGetInventoryName extends LuaInventoryMethod
     {
         return new Object[]
         {
-            ((IInventory) te).getInventoryName()
+            ((IWorldNameable) te).getName()
         };
     }
+
+    @Override
+    public boolean applies(TileEntity te)
+    {
+        return te instanceof IWorldNameable;
+    }
+
 }

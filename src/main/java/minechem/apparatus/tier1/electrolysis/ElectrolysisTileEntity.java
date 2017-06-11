@@ -21,31 +21,21 @@ public class ElectrolysisTileEntity extends BasicFluidInventoryTileEntity
 
     public byte addItem(ItemStack chemicalItemStack)
     {
-        if (chemicalItemStack.getItem() != null && chemicalItemStack.getItem() instanceof ChemicalItem)
+        if (chemicalItemStack.getItem() instanceof ChemicalItem)
         {
-            if (this.getStackInSlot(0) == null)
+            if (this.inventory.getStackInSlot(0) == null)
             {
-                this.setInventorySlotContents(0, chemicalItemStack);
+                this.inventory.setStackInSlot(0, chemicalItemStack);
                 return 0;
-            } else if (this.getStackInSlot(1) == null)
+            } else if (this.inventory.getStackInSlot(1) == null)
             {
-                this.setInventorySlotContents(1, chemicalItemStack);
+                this.inventory.setStackInSlot(1, chemicalItemStack);
                 return 1;
             }
         }
         return -1;
     }
 
-    @Override
-    public String getInventoryName()
-    {
-        return Compendium.Naming.electrolysis;
-    }
-
-    @Override
-    public void updateEntity()
-    {
-    }
 
     /**
      * Fill a specific side of the TileEntity with a ChemicalBase
@@ -77,20 +67,20 @@ public class ElectrolysisTileEntity extends BasicFluidInventoryTileEntity
         if (side == LEFTSIDE)
         {
 
-            if (this.getStackInSlot(1) != null)
+            if (this.inventory.getStackInSlot(1) != null)
             {
-                ChemicalItem chemical = (ChemicalItem) getStackInSlot(1).getItem();
-                this.decrStackSize(1, 1);
+                ChemicalItem chemical = (ChemicalItem) this.inventory.getStackInSlot(1).getItem();
+                this.inventory.extractItem(1, 1, false);
                 leftTube = false;
                 return chemical;
             }
         }
         if (side == RIGHTSIDE)
         {
-            if (this.getStackInSlot(0) != null)
+            if (this.inventory.getStackInSlot(0) != null)
             {
-                ChemicalItem chemical = (ChemicalItem) getStackInSlot(0).getItem();
-                this.decrStackSize(0, 1);
+                ChemicalItem chemical = (ChemicalItem) this.inventory.getStackInSlot(0).getItem();
+                this.inventory.extractItem(0, 1, false);
                 rightTube = false;
                 return chemical;
             }
@@ -100,7 +90,7 @@ public class ElectrolysisTileEntity extends BasicFluidInventoryTileEntity
 
     public ChemicalItem getLeftTube()
     {
-        ItemStack itemStack = decrStackSize(LEFTSIDE, 1);
+        ItemStack itemStack = this.inventory.extractItem(LEFTSIDE, 1, false);
         if (itemStack != null)
         {
             if (itemStack.getItem() instanceof ChemicalItem)
@@ -113,7 +103,7 @@ public class ElectrolysisTileEntity extends BasicFluidInventoryTileEntity
 
     public ChemicalItem getRightTube()
     {
-        ItemStack itemStack = decrStackSize(RIGHTSIDE, 1);
+        ItemStack itemStack = this.inventory.extractItem(RIGHTSIDE, 1, false);
         if (itemStack != null)
         {
             if (itemStack.getItem() instanceof ChemicalItem)
@@ -124,25 +114,4 @@ public class ElectrolysisTileEntity extends BasicFluidInventoryTileEntity
         return null;
     }
 
-    /**
-     * Save data to NBT
-     *
-     * @param nbttagcompound
-     */
-    @Override
-    public void writeToNBT(NBTTagCompound nbttagcompound)
-    {
-        super.writeToNBT(nbttagcompound);
-    }
-
-    /**
-     * Read saved values from NBT
-     *
-     * @param nbttagcompound
-     */
-    @Override
-    public void readFromNBT(NBTTagCompound nbttagcompound)
-    {
-        super.readFromNBT(nbttagcompound);
-    }
 }

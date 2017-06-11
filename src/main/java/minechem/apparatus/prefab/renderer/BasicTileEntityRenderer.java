@@ -7,7 +7,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
 
-public abstract class BasicTileEntityRenderer extends TileEntitySpecialRenderer
+public abstract class BasicTileEntityRenderer<TE extends TileEntity> extends TileEntitySpecialRenderer<TE>
 {
     protected BasicModel model;
     protected float rotation;
@@ -39,14 +39,14 @@ public abstract class BasicTileEntityRenderer extends TileEntitySpecialRenderer
     }
 
     @Override
-    public void renderTileEntityAt(TileEntity tileEntity, double x, double y, double z, float scale)
+    public void renderTileEntityAt(TE te, double x, double y, double z, float partialTicks, int destroyStage)
     {
-        if (tileEntity instanceof BasicInventoryTileEntity)
+        if (te instanceof BasicInventoryTileEntity)
         {
             GL11.glPushMatrix();
             GL11.glTranslated(x + xOffset, y + yOffset, z + zOffset);
             GL11.glRotatef(180f, 0f, 0f, 1f);
-            GL11.glRotatef((tileEntity.getBlockMetadata() * 90.0F), 0.0F, 1.0F, 0.0F);
+            GL11.glRotatef((te.getBlockMetadata() * 90.0F), 0.0F, 1.0F, 0.0F);
             GL11.glEnable(GL11.GL_BLEND);
             GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
             GL11.glScaled(xScale, yScale, zScale);

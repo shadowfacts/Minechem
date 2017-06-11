@@ -5,15 +5,18 @@ import java.util.Random;
 import minechem.Compendium;
 import minechem.helper.LocalizationHelper;
 import minechem.item.augment.IAugmentItem;
-import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
+import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.IFluidContainerItem;
 
@@ -172,7 +175,7 @@ public abstract class AugmentBase implements IAugment
     }
 
     @Override
-    public boolean onBlockDestroyed(ItemStack stack, World world, Block block, int x, int y, int z, EntityLivingBase entityLivingBase, int level)
+    public boolean onBlockDestroyed(ItemStack stack, World world, IBlockState state, BlockPos pos, EntityLivingBase entityLivingBase, int level)
     {
         return false;
     }
@@ -205,13 +208,10 @@ public abstract class AugmentBase implements IAugment
 
     /**
      * Callback for item usage. If the item does something special on right clicking, he will have one of those. Return True if something happen and false if it don't.
-     *
-     * @param stack
+     *  @param stack
      * @param player
      * @param world
-     * @param x
-     * @param y
-     * @param z
+     * @param pos
      * @param side
      * @param hitX
      * @param hitY
@@ -219,7 +219,7 @@ public abstract class AugmentBase implements IAugment
      * @param level
      */
     @Override
-    public boolean onItemUse(ItemStack stack, EntityPlayer player, World world, int x, int y, int z, int side, float hitX, float hitY, float hitZ, int level)
+    public boolean onItemUse(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ, int level)
     {
         return false;
     }
@@ -228,18 +228,15 @@ public abstract class AugmentBase implements IAugment
      * @param stack
      * @param player
      * @param world
-     * @param x
-     * @param y
-     * @param z
-     * @param side
+     * @param pos
+     *@param side
      * @param hitX
      * @param hitY
      * @param hitZ
-     * @param level
-     * @return true to prevent further processing
+     * @param level      @return true to prevent further processing
      */
     @Override
-    public boolean onItemUseFirst(ItemStack stack, EntityPlayer player, World world, int x, int y, int z, int side, float hitX, float hitY, float hitZ, int level)
+    public boolean onItemUseFirst(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ, int level)
     {
         return false;
     }
@@ -340,12 +337,12 @@ public abstract class AugmentBase implements IAugment
     /**
      * @param stack
      * @param prevDigSpeed unmodified dig speed
-     * @param block
+     * @param state
      * @param metadata
      * @param level        @return
      */
     @Override
-    public float getModifiedDigSpeed(ItemStack stack, float prevDigSpeed, Block block, int metadata, int level)
+    public float getModifiedDigSpeed(ItemStack stack, float prevDigSpeed, IBlockState state, int metadata, int level)
     {
         return prevDigSpeed;
     }
@@ -363,14 +360,16 @@ public abstract class AugmentBase implements IAugment
     }
 
     /**
+     *
+     * @param slot
      * @param stack
      * @param level
      * @return Attribute Modifiers to the base tools attributes.
      */
     @Override
-    public Multimap<String, AttributeModifier> getAttributeModifiers(ItemStack stack, int level)
+    public Multimap<String, AttributeModifier> getAttributeModifiers(EntityEquipmentSlot slot, ItemStack stack, int level)
     {
-        return Items.diamond.getAttributeModifiers(null);
+        return Items.DIAMOND.getAttributeModifiers(slot, null);
     }
 
     /**

@@ -5,6 +5,8 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.VertexBuffer;
+import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
@@ -63,7 +65,7 @@ public abstract class GuiElement extends Gui
      */
     protected FontRenderer getFontRenderer()
     {
-        return Minecraft.getMinecraft().fontRenderer;
+        return Minecraft.getMinecraft().fontRendererObj;
     }
 
     /**
@@ -80,14 +82,14 @@ public abstract class GuiElement extends Gui
      */
     protected void drawTexturedModalRect(int x, int y, int u, int v, int actualWidth, int actualHeight, int drawWidth, int drawHeight)
     {
-        float f = 0.00390625F;
-        float f1 = 0.00390625F;
-        Tessellator tessellator = Tessellator.instance;
-        tessellator.startDrawingQuads();
-        tessellator.addVertexWithUV((double) x, (double) (y + drawHeight), (double) this.zLevel, (double) ((float) u * f), (double) ((float) (v + actualHeight) * f1));
-        tessellator.addVertexWithUV((double) (x + drawWidth), (double) (y + drawHeight), (double) this.zLevel, (double) ((float) (u + actualWidth) * f), (double) ((float) (v + actualHeight) * f1));
-        tessellator.addVertexWithUV((double) (x + drawWidth), (double) (y), (double) this.zLevel, (double) ((float) (u + actualWidth) * f), (double) ((float) (v) * f1));
-        tessellator.addVertexWithUV((double) (x), (double) (y), (double) this.zLevel, (double) ((float) (u) * f), (double) ((float) (v) * f1));
+        final float f = 0.00390625F;
+        Tessellator tessellator = Tessellator.getInstance();
+        VertexBuffer buf = tessellator.getBuffer();
+        buf.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
+        buf.pos(x, y + drawHeight, zLevel).tex(u * f, (v + actualHeight) * f).endVertex();
+        buf.pos(x + drawWidth, y + drawHeight, zLevel).tex((u + actualWidth) * f, (v + actualHeight) * f).endVertex();
+        buf.pos(x + drawWidth, y, zLevel).tex((u + actualWidth) * f, v * f).endVertex();
+        buf.pos(x, y, zLevel).tex(u * f, v * f).endVertex();
         tessellator.draw();
     }
 

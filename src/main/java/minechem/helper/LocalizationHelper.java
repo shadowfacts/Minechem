@@ -1,8 +1,8 @@
 package minechem.helper;
 
-import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.relauncher.Side;
-import net.minecraft.util.StatCollector;
+import net.minecraft.client.resources.I18n;
+import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.minecraftforge.fml.relauncher.Side;
 
 import java.util.IllegalFormatException;
 
@@ -12,22 +12,20 @@ import java.util.IllegalFormatException;
  */
 public class LocalizationHelper
 {
-    public static String getLocalString(String key)
+    public static String getLocalString(String key, Object... params)
     {
-        return getLocalString(key, false);
+        return getLocalString(key, false, params);
     }
 
-    public static String getLocalString(String key, boolean capitalize)
+    public static String getLocalString(String key, boolean capitalize, Object... params)
     {
         if (FMLCommonHandler.instance().getSide() == Side.CLIENT)
         {
             String localString;
-            if (StatCollector.canTranslate(key))
-            {
-                localString = StatCollector.translateToLocal(key);
-            } else
-            {
-                localString = StatCollector.translateToFallback(key);
+            try {
+                localString = I18n.format(key, params);
+            } catch (IllegalFormatException e) {
+                localString = "Format error: " + key;
             }
             if (capitalize)
             {
@@ -38,36 +36,4 @@ public class LocalizationHelper
         return key;
     }
 
-    public static String getFormattedString(String key, Object... objects)
-    {
-        return getFormattedString(key, false, objects);
-    }
-
-    public static String getFormattedString(String key, boolean capitalize, Object... objects)
-    {
-        if (FMLCommonHandler.instance().getSide() == Side.CLIENT)
-        {
-            String localString;
-            if (StatCollector.canTranslate(key))
-            {
-                localString = StatCollector.translateToLocalFormatted(key, objects);
-            } else
-            {
-                localString = StatCollector.translateToFallback(key);
-                try
-                {
-                    localString = String.format(localString, objects);
-                } catch (IllegalFormatException illegalformatexception)
-                {
-                    return "Format error: " + key;
-                }
-            }
-            if (capitalize)
-            {
-                localString = localString.toUpperCase();
-            }
-            return localString;
-        }
-        return key;
-    }
 }
